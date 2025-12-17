@@ -2,25 +2,22 @@
 <html lang="ko">
 <head>
     <meta charset="UTF-8">
-    <title>BookFlow - 캠핑 예약 서비스</title>
+    <title>BookFlow</title>
     <link rel="stylesheet" href="../styles/reset.css">
     <link rel="stylesheet" href="../styles/layout.css">
     <link rel="stylesheet" href="../styles/main.css">
+    <script type="module" src="../scripts/pages/index.js"></script>
 </head>
-
 <body>
 
-<script type="module">
-    import { loadHeader } from "../scripts/components/header.js";
-    import { loadFooter } from "../scripts/components/footer.js";
-    loadHeader();
-    loadFooter();
-</script>
+<div id="header"></div>
 
 <main>
-    <h2>환영합니다 행님 😎</h2>
-    <p>BookFlow 캠핑/숙박 예약 시스템</p>
+    <h2 class="page-title">환영합니다</h2>
+    <p id="intro-text"></p>
 </main>
+
+<div id="footer"></div>
 
 </body>
 </html>

@@ -6,21 +6,16 @@
     <link rel="stylesheet" href="../styles/reset.css">
     <link rel="stylesheet" href="../styles/layout.css">
     <link rel="stylesheet" href="../styles/components.css">
+    <script type="module" src="../scripts/pages/room.js"></script>
 </head>
-
 <body>
+    <div id="header"></div>
 
-<div id="accommodation-info"></div>
-<h3>방 목록</h3>
-<div id="room-list"></div>
+    <main>
+        <h2 class="page-title">방 목록</h2>
+        <div id="room-list"></div>
+    </main>
 
-<script type="module">
-    import { loadHeader } from "../scripts/components/header.js";
-    import { loadFooter } from "../scripts/components/footer.js";
-    import "../scripts/pages/room.js";
-    loadHeader();
-    loadFooter();
-</script>
-
+    <div id="footer"></div>
 </body>
 </html>

@@ -1,28 +1,33 @@
-const params = new URLSearchParams(window.location.search);
-const accId = params.get("id");
+import { loadHeader } from "../components/header.js";
+import { loadFooter } from "../components/footer.js";
 
-document.getElementById("accommodation-info").innerHTML = `
-    <h2>숙소 ID: ${accId}</h2>
-    <p>숙소 상세 정보는 추후 API로 제공됩니다.</p>
-`;
+loadHeader();
+loadFooter();
+
+const params = new URLSearchParams(location.search);
+const accommodationId = params.get('accommodationId');
+
+if (!accommodationId) {
+    alert('잘못된 접근입니다.');
+}
 
 const rooms = [
-    { id: 1, name: "A사이트", price: 50000, capacity: 4 },
-    { id: 2, name: "B사이트", price: 60000, capacity: 6 }
+    { id: 1, name: '스탠다드 룸', price: 70000 },
+    { id: 2, name: '패밀리 룸', price: 120000 }
 ];
 
-const list = document.getElementById("room-list");
+const list = document.getElementById('room-list');
 
-rooms.forEach(room => {
-    const box = document.createElement("div");
-    box.className = "card";
+if (!list) {
+    console.error('room-list 요소를 찾을 수 없습니다.');
+}
 
-    box.innerHTML = `
+list.innerHTML = rooms.map(room => `
+    <div class="card">
         <h4>${room.name}</h4>
-        <p>가격: ${room.price}원</p>
-        <p>수용 인원: ${room.capacity}명</p>
-        <a href="reservation.html?roomId=${room.id}">예약하기</a>
-    `;
-
-    list.appendChild(box);
-});
+        <p>${room.price.toLocaleString()}원</p>
+        <a href="/frontend/pages/reservation.html?roomId=${room.id}">
+            예약하기
+        </a>
+    </div>
+`).join('');

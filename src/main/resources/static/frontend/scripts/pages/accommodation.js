@@ -1,19 +1,21 @@
 const accommodations = [
-    { id: 1, name: "힐링 캠핑장", address: "강원도 평창군" },
-    { id: 2, name: "산속 글램핑", address: "경기도 가평" }
+    { id: 1, name: '파인 캠핑장', address: '강원도', price: 80000 },
+    { id: 2, name: '오션뷰 숙소', address: '부산', price: 120000 }
 ];
 
-const list = document.getElementById("accommodation-list");
+const list = document.getElementById('accommodation-list');
 
-accommodations.forEach(acc => {
-    const card = document.createElement("div");
-    card.className = "card";
+if (!list) {
+    console.error('accommodation-list 요소를 찾을 수 없습니다.');
+}
 
-    card.innerHTML = `
-        <h3>${acc.name}</h3>
-        <p>${acc.address}</p>
-        <a href="room.html?id=${acc.id}">방 보기</a>
-    `;
-
-    list.appendChild(card);
-});
+list.innerHTML = accommodations.map(a => `
+    <div class="card">
+        <h3>${a.name}</h3>
+        <p>${a.address}</p>
+        <p>${a.price.toLocaleString()}원</p>
+        <a href="/frontend/pages/room.html?accommodationId=${a.id}">
+            방 보기
+        </a>
+    </div>
+`).join('');

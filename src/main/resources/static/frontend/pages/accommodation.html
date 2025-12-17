@@ -6,19 +6,24 @@
     <link rel="stylesheet" href="../styles/reset.css">
     <link rel="stylesheet" href="../styles/layout.css">
     <link rel="stylesheet" href="../styles/components.css">
+    <script type="module" src="../scripts/pages/accommodation.js"></script>
 </head>
-
 <body>
+    <div id="header"></div>
 
-<div id="accommodation-list"></div>
+    <main>
+        <h2 class="page-title">숙소 목록</h2>
+        <div id="accommodation-list"></div>
+    </main>
 
-<script type="module">
-    import { loadHeader } from "../scripts/components/header.js";
-    import { loadFooter } from "../scripts/components/footer.js";
-    import "../scripts/pages/accommodation.js";
-    loadHeader();
-    loadFooter();
-</script>
+    <div id="footer"></div>
 
+    <script type="module">
+        import { loadHeader } from "../scripts/components/header.js";
+        import { loadFooter } from "../scripts/components/footer.js";
+
+        loadHeader();
+        loadFooter();
+    </script>
 </body>
 </html>

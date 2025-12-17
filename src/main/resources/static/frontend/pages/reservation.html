@@ -5,29 +5,25 @@
     <title>예약하기</title>
     <link rel="stylesheet" href="../styles/reset.css">
     <link rel="stylesheet" href="../styles/layout.css">
+    <link rel="stylesheet" href="../styles/components.css">
+    <script type="module" src="../scripts/pages/reservation.js"></script>
 </head>
-
 <body>
+    <div id="header"></div>
 
-<h2>예약하기</h2>
+    <main>
+        <h2 class="page-title">예약하기</h2>
+        <form id="reservation-form">
+            <label for="startDate">시작 날짜</label>
+            <input type="date" id="startDate" required>
 
-<form id="reservation-form">
-    <label>시작 날짜:</label>
-    <input type="date" id="startDate"><br><br>
+            <label for="endDate">종료 날짜</label>
+            <input type="date" id="endDate" required>
 
-    <label>종료 날짜:</label>
-    <input type="date" id="endDate"><br><br>
+            <button type="submit" class="button">예약 요청</button>
+        </form>
+    </main>
 
-    <button type="button" id="reserveButton">예약 요청</button>
-</form>
-
-<script type="module">
-    import { loadHeader } from "../scripts/components/header.js";
-    import { loadFooter } from "../scripts/components/footer.js";
-    import "../scripts/pages/reservation.js";
-    loadHeader();
-    loadFooter();
-</script>
-
+    <div id="footer"></div>
 </body>
 </html>

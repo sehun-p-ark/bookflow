@@ -1,0 +1,69 @@
+/* 메인 페이지 기본 */
+main {
+    max-width: 80rem;
+    margin: 4rem auto;
+    padding: 2rem;
+}
+
+main h2 {
+    font-size: 2.8rem;
+    margin-bottom: 2rem;
+}
+
+main p {
+    font-size: 1.6rem;
+    color: #444444;
+}
+
+/* 숙소 목록 */
+#accommodation-list .card h3 {
+    font-size: 2rem;
+    margin-bottom: 0.5rem;
+}
+
+#accommodation-list .card p {
+    font-size: 1.4rem;
+    margin-bottom: 1rem;
+}
+
+#accommodation-list .card a {
+    color: #0984e3;
+    font-weight: bold;
+    font-size: 1.4rem;
+}
+
+/* 방 목록 */
+#room-list .card h4 {
+    font-size: 1.8rem;
+    margin-bottom: 0.5rem;
+}
+
+#room-list .card p {
+    margin-bottom: 0.6rem;
+    font-size: 1.4rem;
+}
+
+/* 예약 페이지 */
+form {
+    width: 32rem;
+    margin: 0 auto;
+    padding: 2rem;
+}
+
+label {
+    font-size: 1.4rem;
+    font-weight: bold;
+}
+
+input[type="date"] {
+    width: 100%;
+    padding: 1rem;
+    margin: 0.5rem 0 1.5rem 0;
+    font-size: 1.4rem;
+    border-radius: 0.6rem;
+    border: 0.1rem solid #b2bec3;
+}
+
+button {
+    margin-top: 1rem;
+}

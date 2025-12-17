@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>방 목록</title>
+    <link rel="stylesheet" href="../styles/reset.css">
+    <link rel="stylesheet" href="../styles/layout.css">
+    <link rel="stylesheet" href="../styles/components.css">
+</head>
+
+<body>
+
+<div id="accommodation-info"></div>
+<h3>방 목록</h3>
+<div id="room-list"></div>
+
+<script type="module">
+    import { loadHeader } from "../scripts/components/header.js";
+    import { loadFooter } from "../scripts/components/footer.js";
+    import "../scripts/pages/room.js";
+    loadHeader();
+    loadFooter();
+</script>
+
+</body>
+</html>

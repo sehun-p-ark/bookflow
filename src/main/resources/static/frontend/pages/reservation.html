@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>예약하기</title>
+    <link rel="stylesheet" href="../styles/reset.css">
+    <link rel="stylesheet" href="../styles/layout.css">
+</head>
+
+<body>
+
+<h2>예약하기</h2>
+
+<form id="reservation-form">
+    <label>시작 날짜:</label>
+    <input type="date" id="startDate"><br><br>
+
+    <label>종료 날짜:</label>
+    <input type="date" id="endDate"><br><br>
+
+    <button type="button" id="reserveButton">예약 요청</button>
+</form>
+
+<script type="module">
+    import { loadHeader } from "../scripts/components/header.js";
+    import { loadFooter } from "../scripts/components/footer.js";
+    import "../scripts/pages/reservation.js";
+    loadHeader();
+    loadFooter();
+</script>
+
+</body>
+</html>

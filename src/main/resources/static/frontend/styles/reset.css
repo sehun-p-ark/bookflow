@@ -1,0 +1,26 @@
+/* 기본 reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 62.5%;
+}
+
+/* 기본 바디 설정 */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f6fa;
+    color: #333333;
+}
+
+a {
+    text-decoration: none;
+    color: inherit;
+}
+
+ul, li {
+    list-style: none;
+}

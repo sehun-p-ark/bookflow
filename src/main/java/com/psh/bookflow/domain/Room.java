@@ -27,7 +27,7 @@ public class Room {
 
     // 1박 가격
     @Column(nullable = false)
-    private Long pricePerNight;
+    private Integer price;
 
     // 최대 인원
     @Column(nullable = false)
@@ -57,6 +57,15 @@ public class Room {
 
     @PreUpdate
     public void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
+    public Room(String name, int price, int capacity, Accommodation accommodation) {
+        this.name = name;
+        this.price = price;
+        this.capacity = capacity;
+        this.accommodation = accommodation;
+        this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 }

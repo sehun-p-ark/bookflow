@@ -30,11 +30,11 @@ public class Reservation {
 
     // 체크인 날짜
     @Column(nullable = false)
-    private LocalDate startDate;
+    private LocalDate checkInDate;
 
     // 체크아웃 날짜
     @Column(nullable = false)
-    private LocalDate endDate;
+    private LocalDate checkOutDate;
 
     // 총 금액
     @Column(nullable = false)
@@ -59,5 +59,12 @@ public class Reservation {
     @PreUpdate
     public void onUpdate() {
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public Reservation(User user, Room room, LocalDate checkInDate, LocalDate checkOutDate) {
+        this.user = user;
+        this.room = room;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
     }
 }

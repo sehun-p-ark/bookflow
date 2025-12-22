@@ -3,13 +3,10 @@ package com.psh.bookflow.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
-
 import java.time.LocalDateTime;
 
 @Entity //현재 클래스를 DB 테이블로 쓰겠음
 @Getter
-@Setter
 @NoArgsConstructor // 기본 생성자 (JPA 엔티티는 필수)
 public class User { // user 테이블
 
@@ -55,5 +52,11 @@ public class User { // user 테이블
     public void onUpdate() {
         // 수정일이 자동 갱신
         this.updatedAt = LocalDateTime.now();
+    }
+
+    public User(String email, String password, String name) {
+        this.email = email;
+        this.password = password;
+        this.name = name;
     }
 }

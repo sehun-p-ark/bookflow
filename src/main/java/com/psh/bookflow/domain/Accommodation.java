@@ -61,4 +61,13 @@ public class Accommodation {
     public void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+
+    public Accommodation(String name, String description, String address, String phone, String category, User owner) {
+        this.name = name;
+        this.description = description;
+        this.address = address;
+        this.phone = phone;
+        this.category = category;
+        this.owner = owner;
+    }
 }

@@ -1,16 +1,12 @@
 package com.psh.bookflow.controller;
 
-import com.psh.bookflow.domain.Reservation;
-import com.psh.bookflow.domain.Room;
-import com.psh.bookflow.domain.User;
-import com.psh.bookflow.dto.reservation.ReservationRequest;
-import com.psh.bookflow.dto.reservation.ReservationResponse;
 import com.psh.bookflow.service.ReservationService;
-import com.psh.bookflow.service.RoomService;
-import com.psh.bookflow.service.UserService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.time.LocalDate;
 
 @RestController
 @RequestMapping("/reservations")
@@ -18,44 +14,49 @@ import org.springframework.web.bind.annotation.*;
 public class ReservationController {
 
     private final ReservationService reservationService;
-    private final UserService userService;
-    private final RoomService roomService;
 
     /**
      * 예약 생성
      */
     @PostMapping
-    public ResponseEntity<ReservationResponse> createReservation(
-            @RequestBody ReservationRequest request
+    public ResponseEntity<Long> create(
+            @RequestParam Long userId,
+            @RequestParam Long roomId,
+            @RequestParam LocalDate checkIn,
+            @RequestParam LocalDate checkOut
     ) {
-        // 예약자 조회
-        User user = userService.getById(request.getUserId());
+        Long reservationId =
+                reservationService.create(userId, roomId, checkIn, checkOut);
 
-        // 객실 조회
-        Room room = roomService.findById(request.getRoomId());
-
-        // DTO → Entity
-        Reservation reservation = new Reservation(
-                user,
-                room,
-                request.getCheckInDate(),
-                request.getCheckOutDate()
-        );
-
-        Reservation saved = reservationService.reserve(reservation);
-
-        // Entity → Response DTO
-        return ResponseEntity.ok(new ReservationResponse(saved));
+        return ResponseEntity
+                .status(HttpStatus.CREATED)
+                .body(reservationId);
     }
 
     /**
-     * 예약 단건 조회
+     * 예약 확정
      */
-    @GetMapping("/{id}")
-    public ResponseEntity<ReservationResponse> getReservation(
-            @PathVariable Long id
-    ) {
-        Reservation reservation = reservationService.findById(id);
-        return ResponseEntity.ok(new ReservationResponse(reservation));
+    @PostMapping("/{id}/confirm")
+    public ResponseEntity<Void> confirm(@PathVariable("id") Long reservationId) {
+        reservationService.confirm(reservationId);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 예약 취소
+     */
+    @PostMapping("/{id}/cancel")
+    public ResponseEntity<Void> cancel(@PathVariable("id") Long reservationId) {
+        reservationService.cancel(reservationId);
+        return ResponseEntity.ok().build();
+    }
+
+    /**
+     * 예약 완료
+     */
+    @PostMapping("/{id}/complete")
+    public ResponseEntity<Void> complete(@PathVariable("id") Long reservationId) {
+        reservationService.complete(reservationId);
+        return ResponseEntity.ok().build();
     }
 }

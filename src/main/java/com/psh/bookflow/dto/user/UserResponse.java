@@ -6,9 +6,9 @@ import lombok.Getter;
 @Getter
 public class UserResponse {
 
-    private Long id;
-    private String email;
-    private String name;
+    private final Long id;
+    private final String email;
+    private final String name;
 
     public UserResponse(User user) {
         this.id = user.getId();

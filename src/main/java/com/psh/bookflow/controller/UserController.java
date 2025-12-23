@@ -12,21 +12,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-
-//    private final UserService userService;
-//
-//    @GetMapping("/{email}")
-//    public ResponseEntity<User> getUserByEmail(@PathVariable String email) {
-//        User user = userService.getByEmail(email);
-//        return ResponseEntity.ok(user);
-//    }
-//
-//    @PostMapping
-//    public ResponseEntity<User> createUser(@RequestBody User user) {
-//        User savedUser = userService.save(user);
-//        return ResponseEntity.ok(savedUser);
-//    }
-private final UserService userService;
+    private final UserService userService;
 
     /**
      * 회원 생성

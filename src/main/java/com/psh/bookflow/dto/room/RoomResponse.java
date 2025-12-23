@@ -6,10 +6,10 @@ import lombok.Getter;
 @Getter
 public class RoomResponse {
 
-    private Long id;
-    private String name;
-    private int price;
-    private int capacity;
+    private final Long id;
+    private final String name;
+    private final int price;
+    private final int capacity;
 
     public RoomResponse(Room room) {
         this.id = room.getId();

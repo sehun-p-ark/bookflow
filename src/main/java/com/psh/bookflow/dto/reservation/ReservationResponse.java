@@ -8,13 +8,11 @@ import java.time.LocalDate;
 @Getter
 public class ReservationResponse {
 
-    private Long id;
-    private Long userId;
-    private Long roomId;
-    private LocalDate checkInDate;
-    private LocalDate checkOutDate;
-    private Long totalPrice;
-    private String status;
+    private final Long id;
+    private final Long userId;
+    private final Long roomId;
+    private final LocalDate checkInDate;
+    private final LocalDate checkOutDate;
 
     public ReservationResponse(Reservation reservation) {
         this.id = reservation.getId();

@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Reservation {
 
@@ -18,29 +17,25 @@ public class Reservation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // 예약자 FK (User)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    // 객실 FK (Room)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "room_id", nullable = false)
     private Room room;
 
-    // 체크인 날짜
     @Column(nullable = false)
     private LocalDate checkInDate;
 
-    // 체크아웃 날짜
     @Column(nullable = false)
     private LocalDate checkOutDate;
 
-    // 총 금액
     @Column(nullable = false)
     private Long totalPrice;
 
-    // 예약 상태 (REQUESTED, CONFIRMED, CANCELED, COMPLETED)
+    // 🔥 필수 수정 포인트
+    @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private ReservationStatus status = ReservationStatus.REQUESTED;
 
@@ -51,20 +46,35 @@ public class Reservation {
     private LocalDateTime updatedAt;
 
     @PrePersist
-    public void onCreate() {
+    protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
-    public void onUpdate() {
+    protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public Reservation(User user, Room room, LocalDate checkInDate, LocalDate checkOutDate) {
+    public Reservation(User user, Room room, LocalDate checkInDate, LocalDate checkOutDate, Long totalPrice) {
         this.user = user;
         this.room = room;
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
+        this.totalPrice = totalPrice;
+    }
+
+    // ✅ 상태 전이 메서드
+    public void confirm() {
+        this.status = ReservationStatus.CONFIRMED;
+    }
+
+    public void cancel() {
+        this.status = ReservationStatus.CANCELED;
+    }
+
+    public void complete() {
+        this.status = ReservationStatus.COMPLETED;
     }
 }
+

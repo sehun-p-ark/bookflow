@@ -9,36 +9,29 @@ import java.time.LocalDateTime;
 
 @Entity
 @Getter
-@Setter
 @NoArgsConstructor
 public class Room {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    //객실 고유 번호
     private Long id;
 
-    // 객실 이름
     @Column(nullable = false, length = 100)
     private String name;
 
-    // 객실 설명
     @Column(columnDefinition = "TEXT")
     private String description;
 
-    // 1박 가격
     @Column(nullable = false)
     private Integer price;
 
-    // 최대 인원
     @Column(nullable = false)
     private Integer capacity;
 
-    // 객실 상태 (AVAILABLE, UNAVAILABLE, MAINTENANCE)
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private RoomStatus status = RoomStatus.AVAILABLE;
 
-    // 숙소(FK) - 다대일 관계
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accommodation_id", nullable = false)
     private Accommodation accommodation;
@@ -50,13 +43,13 @@ public class Room {
     private LocalDateTime updatedAt;
 
     @PrePersist
-    public void onCreate() {
+    protected void onCreate() {
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
     }
 
     @PreUpdate
-    public void onUpdate() {
+    protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
 
@@ -67,5 +60,10 @@ public class Room {
         this.accommodation = accommodation;
         this.createdAt = LocalDateTime.now();
         this.updatedAt = LocalDateTime.now();
+    }
+
+    // ✅ 상태 변경은 명시적 메서드로만
+    public void changeStatus(RoomStatus status) {
+        this.status = status;
     }
 }

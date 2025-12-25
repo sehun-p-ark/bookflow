@@ -34,7 +34,6 @@ public class Reservation {
     @Column(nullable = false)
     private Long totalPrice;
 
-    // 🔥 필수 수정 포인트
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private ReservationStatus status = ReservationStatus.REQUESTED;
@@ -64,7 +63,6 @@ public class Reservation {
         this.totalPrice = totalPrice;
     }
 
-    // ✅ 상태 전이 메서드
     public void confirm() {
         this.status = ReservationStatus.CONFIRMED;
     }

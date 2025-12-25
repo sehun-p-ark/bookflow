@@ -1,14 +1,16 @@
 package com.psh.bookflow.controller;
 
-import com.psh.bookflow.domain.Accommodation;
-import com.psh.bookflow.domain.Room;
+import com.psh.bookflow.dto.reservation.ReservationResponse;
 import com.psh.bookflow.dto.room.RoomRequest;
 import com.psh.bookflow.dto.room.RoomResponse;
-import com.psh.bookflow.service.AccommodationService;
+import com.psh.bookflow.service.ReservationService;
 import com.psh.bookflow.service.RoomService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/rooms")
@@ -16,41 +18,25 @@ import org.springframework.web.bind.annotation.*;
 public class RoomController {
 
     private final RoomService roomService;
-    private final AccommodationService accommodationService;
+    private final ReservationService reservationService;
 
-    /**
-     * 객실 등록
-     */
+    // 객실 등록
     @PostMapping
-    public ResponseEntity<RoomResponse> createRoom(
-            @RequestBody RoomRequest request
-    ) {
-        // 소속 숙소 조회
-        Accommodation accommodation =
-                accommodationService.findById(request.getAccommodationId());
-
-        // DTO → Entity
-        Room room = new Room(
-                request.getName(),
-                request.getPrice(),
-                request.getCapacity(),
-                accommodation
-        );
-
-        Room saved = roomService.save(room);
-
-        // Entity → Response DTO
-        return ResponseEntity.ok(new RoomResponse(saved));
+    public ResponseEntity<RoomResponse> createRoom(@RequestBody RoomRequest request) {
+        RoomResponse response = roomService.create(request);
+        return ResponseEntity.status(HttpStatus.CREATED).body(response);
     }
 
-    /**
-     * 객실 단건 조회
-     */
+    // 객실 단일 조회
     @GetMapping("/{id}")
-    public ResponseEntity<RoomResponse> getRoom(
-            @PathVariable Long id
-    ) {
-        Room room = roomService.findById(id);
-        return ResponseEntity.ok(new RoomResponse(room));
+    public ResponseEntity<RoomResponse> getRoom(@PathVariable Long id) {
+        RoomResponse response = roomService.findResponseById(id);
+        return ResponseEntity.ok(response);
+    }
+
+    // 객실 예약 여부 조회
+    @GetMapping("/{id}/reservations")
+    public List<ReservationResponse> getReservationsByRoom(@PathVariable("id") Long roomId) {
+        return reservationService.findByRoom(roomId);
     }
 }

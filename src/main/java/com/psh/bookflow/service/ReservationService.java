@@ -1,6 +1,7 @@
 package com.psh.bookflow.service;
 
 import com.psh.bookflow.domain.*;
+import com.psh.bookflow.dto.reservation.ReservationResponse;
 import com.psh.bookflow.repository.ReservationRepository;
 import com.psh.bookflow.repository.RoomRepository;
 import com.psh.bookflow.repository.UserRepository;
@@ -11,9 +12,11 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.EnumSet;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
+@Transactional(readOnly = true)
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
@@ -24,9 +27,7 @@ public class ReservationService {
     private static final EnumSet<ReservationStatus> ACTIVE_RESERVATION_STATUSES =
             EnumSet.of(ReservationStatus.REQUESTED, ReservationStatus.CONFIRMED);
 
-    /**
-     * 예약 생성
-     */
+    // 예약 생성하기
     @Transactional
     public Long create(Long userId, Long roomId, LocalDate checkIn, LocalDate checkOut) {
         validateDates(checkIn, checkOut);
@@ -64,13 +65,10 @@ public class ReservationService {
         return reservationRepository.save(reservation).getId();
     }
 
-    /**
-     * 예약 확정(요청 -> 확정)
-     */
+    // 예약 확정 (요청 -> 확정)
     @Transactional
     public void confirm(Long reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약입니다. id=" + reservationId));
+        Reservation reservation = getReservation(reservationId);
 
         if (reservation.getStatus() != ReservationStatus.REQUESTED) {
             throw new IllegalStateException("요청(REQUESTED) 상태에서만 확정할 수 있습니다. status=" + reservation.getStatus());
@@ -79,13 +77,10 @@ public class ReservationService {
         reservation.confirm();
     }
 
-    /**
-     * 예약 취소(요청/확정 -> 취소)
-     */
+    // 예약 취소 (요청/확정 -> 취소)
     @Transactional
     public void cancel(Long reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약입니다. id=" + reservationId));
+        Reservation reservation = getReservation(reservationId);
 
         if (reservation.getStatus() == ReservationStatus.CANCELED) {
             return; // 이미 취소면 멱등 처리
@@ -97,13 +92,10 @@ public class ReservationService {
         reservation.cancel();
     }
 
-    /**
-     * 예약 완료(확정 -> 완료)
-     */
+    // 예약 완료 (혹정 -> 완료)
     @Transactional
     public void complete(Long reservationId) {
-        Reservation reservation = reservationRepository.findById(reservationId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 예약입니다. id=" + reservationId));
+        Reservation reservation = getReservation(reservationId);
 
         if (reservation.getStatus() != ReservationStatus.CONFIRMED) {
             throw new IllegalStateException("확정(CONFIRMED) 상태에서만 완료 처리할 수 있습니다. status=" + reservation.getStatus());
@@ -112,6 +104,25 @@ public class ReservationService {
         reservation.complete();
     }
 
+    // 객실별 예약 상태 조회
+    public List<ReservationResponse> findByRoom(Long roomId) {
+        return reservationRepository.findByRoomId(roomId);
+    }
+
+    // 유저별 예약 상태 조회
+    public List<ReservationResponse> findByUser(Long userId) {
+        return reservationRepository.findByUserId(userId);
+    }
+
+    // 예약 상태 전부 조회
+    @Transactional(readOnly = true)
+    public ReservationResponse findResponseById(Long reservationId) {
+        Reservation reservation = getReservation(reservationId);
+        // 새로운 ReservationResponse 객체로 만들어서 return
+        return new ReservationResponse(reservation);
+    }
+
+    // 예약일자 검증 로직
     private static void validateDates(LocalDate checkIn, LocalDate checkOut) {
         if (checkIn == null || checkOut == null) {
             throw new IllegalArgumentException("체크인/체크아웃 날짜는 필수입니다.");
@@ -123,5 +134,13 @@ public class ReservationService {
         if (nights < 1) {
             throw new IllegalArgumentException("최소 1박 이상이어야 합니다.");
         }
+    }
+
+    // "private" findById 조회 로직
+    private Reservation getReservation(Long reservationId) {
+        return reservationRepository.findById(reservationId)
+                .orElseThrow(() ->
+                        new IllegalArgumentException("예약을 찾을 수 없습니다. id=" + reservationId)
+                );
     }
 }

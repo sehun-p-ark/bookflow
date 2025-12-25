@@ -3,7 +3,6 @@ package com.psh.bookflow.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
 
@@ -53,14 +52,14 @@ public class Room {
         this.updatedAt = LocalDateTime.now();
     }
 
-    public Room(String name, int price, int capacity, Accommodation accommodation) {
+    public Room(String name, String description, Integer price, Integer capacity, Accommodation accommodation) {
         this.name = name;
+        this.description = description;
         this.price = price;
         this.capacity = capacity;
         this.accommodation = accommodation;
-        this.createdAt = LocalDateTime.now();
-        this.updatedAt = LocalDateTime.now();
     }
+
 
     // ✅ 상태 변경은 명시적 메서드로만
     public void changeStatus(RoomStatus status) {

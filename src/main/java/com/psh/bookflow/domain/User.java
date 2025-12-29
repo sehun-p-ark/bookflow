@@ -54,9 +54,9 @@ public class User { // user 테이블
         this.updatedAt = LocalDateTime.now();
     }
 
-    public User(String email, String password, String name) {
+    public User(String email, String encodedPassword, String name) {
         this.email = email;
-        this.password = password;
+        this.password = encodedPassword;
         this.name = name;
     }
 }

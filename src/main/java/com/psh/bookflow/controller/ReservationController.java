@@ -1,14 +1,19 @@
 package com.psh.bookflow.controller;
 
 import com.psh.bookflow.domain.Reservation;
+import com.psh.bookflow.dto.reservation.ReservationRequest;
 import com.psh.bookflow.dto.reservation.ReservationResponse;
+import com.psh.bookflow.exception.ErrorCode;
+import com.psh.bookflow.exception.UserException;
 import com.psh.bookflow.service.ReservationService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @RestController
 @RequestMapping("/reservations")
@@ -20,14 +25,19 @@ public class ReservationController {
     // 예약 생성
     @PostMapping
     public ResponseEntity<Long> create(
-            @RequestParam Long userId,
-            @RequestParam Long roomId,
-            @RequestParam LocalDate checkIn,
-            @RequestParam LocalDate checkOut
+            @RequestBody ReservationRequest request,
+            HttpSession session
     ) {
-        Long reservationId =
-                reservationService.create(userId, roomId, checkIn, checkOut);
-
+        Long userId = (Long) session.getAttribute("LOGIN_USER_ID");
+        if (userId == null) {
+            throw new UserException(ErrorCode.UNAUTHORIZED);
+        }
+        Long reservationId = reservationService.create(
+                userId,
+                request.getRoomId(),
+                request.getCheckIn(),
+                request.getCheckOut()
+        );
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(reservationId);
@@ -55,8 +65,10 @@ public class ReservationController {
     }
 
     // 예약 조회
-    @GetMapping("/{id}")
-    public ReservationResponse getReservationById(@PathVariable("id") Long reservationId) {
-        return reservationService.findResponseById(reservationId);
+    @GetMapping("/me")
+    public List<ReservationResponse> getMyReservations(HttpSession session) {
+        Long userId = (Long) session.getAttribute("LOGIN_USER_ID");
+        return reservationService.findByUser(userId);
     }
+
 }

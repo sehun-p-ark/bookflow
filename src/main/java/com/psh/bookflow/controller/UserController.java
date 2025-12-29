@@ -1,54 +1,57 @@
 package com.psh.bookflow.controller;
-
-import com.psh.bookflow.domain.Reservation;
 import com.psh.bookflow.domain.User;
-import com.psh.bookflow.dto.reservation.ReservationResponse;
+import com.psh.bookflow.dto.user.LoginRequest;
 import com.psh.bookflow.dto.user.UserRequest;
 import com.psh.bookflow.dto.user.UserResponse;
-import com.psh.bookflow.service.ReservationService;
 import com.psh.bookflow.service.UserService;
+import jakarta.servlet.http.HttpSession;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/users")
 @RequiredArgsConstructor
 public class UserController {
-    private final UserService userService;
-    private final ReservationService reservationService;
 
-    // 회원 생성
+    private final UserService userService;
+
+    // 회원 가입
     @PostMapping
-    public ResponseEntity<UserResponse> createUser(
-            @RequestBody UserRequest request
-    ) {
-        // DTO → Entity 변환 (Controller 책임)
-        User user = new User(
+    public ResponseEntity<UserResponse> register(@RequestBody UserRequest request) {
+        User user = userService.register(
                 request.getEmail(),
                 request.getPassword(),
                 request.getName()
         );
-
-        User savedUser = userService.save(user);
-
-        // Entity → Response DTO 변환
-        return ResponseEntity.ok(new UserResponse(savedUser));
+        return ResponseEntity.ok(new UserResponse(user));
     }
 
-    // 이메일로 회원 조회
-    @GetMapping("/{email}")
+    // 로그인
+    @PostMapping("/login")
+    public ResponseEntity<UserResponse> login(@RequestBody LoginRequest request, HttpSession session) {
+        User user = userService.login(
+                request.getEmail(),
+                request.getPassword()
+        );
+        session.setAttribute("LOGIN_USER_ID", user.getId());
+        return ResponseEntity.ok(new UserResponse(user));
+    }
+
+    // 로그아웃
+    @PostMapping("/logout")
+    public ResponseEntity<Void> logout(HttpSession session) {
+        session.invalidate();
+        return ResponseEntity.ok().build();
+    }
+
+    // 이메일로 회원 조회 (query param)
+    @GetMapping
     public ResponseEntity<UserResponse> getUserByEmail(
-            @PathVariable String email
+            @RequestParam String email
     ) {
         User user = userService.getByEmail(email);
         return ResponseEntity.ok(new UserResponse(user));
     }
-
-    @GetMapping("/{id}/reservations")
-    public List<ReservationResponse> getReservationByUser(@PathVariable("id") Long userId){
-        return reservationService.findByUser(userId);
-    }
 }
+

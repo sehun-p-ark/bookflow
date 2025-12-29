@@ -2,6 +2,8 @@ package com.psh.bookflow.service;
 
 import com.psh.bookflow.domain.*;
 import com.psh.bookflow.dto.reservation.ReservationResponse;
+import com.psh.bookflow.exception.ErrorCode;
+import com.psh.bookflow.exception.ReservationException;
 import com.psh.bookflow.repository.ReservationRepository;
 import com.psh.bookflow.repository.RoomRepository;
 import com.psh.bookflow.repository.UserRepository;
@@ -33,14 +35,17 @@ public class ReservationService {
         validateDates(checkIn, checkOut);
 
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 사용자입니다. userId=" + userId));
+                .orElseThrow(() ->
+                        new ReservationException(ErrorCode.USER_NOT_FOUND)
+                );
 
         Room room = roomRepository.findById(roomId)
-                .orElseThrow(() -> new IllegalArgumentException("존재하지 않는 객실입니다. roomId=" + roomId));
+                .orElseThrow(() ->
+                        new ReservationException(ErrorCode.ROOM_NOT_FOUND));
 
         // 객실 상태 체크(예약 가능)
         if (room.getStatus() != RoomStatus.AVAILABLE) {
-            throw new IllegalStateException("예약 불가능한 객실 상태입니다. status=" + room.getStatus());
+            throw new ReservationException(ErrorCode.ROOM_NOT_AVAILABLE);
         }
 
         // 중복 예약(기간 겹침) 방지
@@ -53,11 +58,11 @@ public class ReservationService {
 
 
         if (overlapped) {
-            throw new IllegalStateException("해당 기간에 이미 예약이 존재합니다.");
+            throw new ReservationException(ErrorCode.RESERVATION_OVERLAPPED);
         }
 
         long nights = ChronoUnit.DAYS.between(checkIn, checkOut); // checkOut은 다음날이어야 하므로 1 이상
-        long totalPrice = nights * (long) room.getPrice();
+        long totalPrice = nights * room.getPrice();
 
         Reservation reservation = new Reservation(user, room, checkIn, checkOut, totalPrice);
         // 기본값: REQUESTED (엔티티에서 기본 세팅되어 있다는 전제)
@@ -71,7 +76,7 @@ public class ReservationService {
         Reservation reservation = getReservation(reservationId);
 
         if (reservation.getStatus() != ReservationStatus.REQUESTED) {
-            throw new IllegalStateException("요청(REQUESTED) 상태에서만 확정할 수 있습니다. status=" + reservation.getStatus());
+            throw new ReservationException(ErrorCode.RESERVATION_INVALID_STATUS);
         }
 
         reservation.confirm();
@@ -83,10 +88,10 @@ public class ReservationService {
         Reservation reservation = getReservation(reservationId);
 
         if (reservation.getStatus() == ReservationStatus.CANCELED) {
-            return; // 이미 취소면 멱등 처리
+            return;
         }
         if (reservation.getStatus() == ReservationStatus.COMPLETED) {
-            throw new IllegalStateException("완료(COMPLETED)된 예약은 취소할 수 없습니다.");
+            throw new ReservationException(ErrorCode.RESERVATION_COMPLETED_CANNOT_CANCEL);
         }
 
         reservation.cancel();
@@ -98,7 +103,7 @@ public class ReservationService {
         Reservation reservation = getReservation(reservationId);
 
         if (reservation.getStatus() != ReservationStatus.CONFIRMED) {
-            throw new IllegalStateException("확정(CONFIRMED) 상태에서만 완료 처리할 수 있습니다. status=" + reservation.getStatus());
+            throw new ReservationException(ErrorCode.RESERVATION_INVALID_STATUS);
         }
 
         reservation.complete();
@@ -125,14 +130,14 @@ public class ReservationService {
     // 예약일자 검증 로직
     private static void validateDates(LocalDate checkIn, LocalDate checkOut) {
         if (checkIn == null || checkOut == null) {
-            throw new IllegalArgumentException("체크인/체크아웃 날짜는 필수입니다.");
+            throw new ReservationException(ErrorCode.RESERVATION_DATE_INVALID);
         }
         if (!checkOut.isAfter(checkIn)) {
-            throw new IllegalArgumentException("체크아웃은 체크인 이후여야 합니다.");
+            throw new ReservationException(ErrorCode.RESERVATION_DATE_INVALID);
         }
         long nights = ChronoUnit.DAYS.between(checkIn, checkOut);
         if (nights < 1) {
-            throw new IllegalArgumentException("최소 1박 이상이어야 합니다.");
+            throw new ReservationException(ErrorCode.RESERVATION_DATE_INVALID);
         }
     }
 
@@ -140,7 +145,7 @@ public class ReservationService {
     private Reservation getReservation(Long reservationId) {
         return reservationRepository.findById(reservationId)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("예약을 찾을 수 없습니다. id=" + reservationId)
+                        new ReservationException(ErrorCode.RESERVATION_NOT_FOUND)
                 );
     }
 }

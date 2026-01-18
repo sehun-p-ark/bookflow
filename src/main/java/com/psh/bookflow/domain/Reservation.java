@@ -1,9 +1,9 @@
 package com.psh.bookflow.domain;
 
+import com.psh.bookflow.domain.Statuses.ReservationStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;

@@ -3,19 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <title>방 목록</title>
-    <link rel="stylesheet" href="../styles/reset.css">
-    <link rel="stylesheet" href="../styles/layout.css">
-    <link rel="stylesheet" href="../styles/components.css">
+    <link rel="stylesheet" href="/frontend/styles/common.css">
+    <link rel="stylesheet" href="/frontend/styles/components/footer.css">
+    <link rel="stylesheet" href="/frontend/styles/components/header.css">
+    <link rel="stylesheet" href="/frontend/styles/pages/room.css">
     <script type="module" src="../scripts/pages/room.js"></script>
 </head>
 <body>
-    <div id="header"></div>
+<div id="header"></div>
 
-    <main>
-        <h2 class="page-title">방 목록</h2>
+<main class="room-page">
+
+    <!-- 🔹 숙소 이미지 영역 -->
+    <section class="accommodation-hero">
+        <img src="/frontend/images/sample-hotel.jpg" alt="숙소 대표 이미지">
+    </section>
+
+    <!-- 🔹 숙소 기본 정보 -->
+    <section class="accommodation-info">
+        <h2 id="accommodation-name">숙소 이름</h2>
+
+        <div class="rating">
+            ⭐ <strong>4.8</strong>
+            <span class="review">(1,234)</span>
+        </div>
+    </section>
+
+    <!-- 🔹 객실 리스트 -->
+    <section class="room-section">
+        <h3 class="section-title">객실 선택</h3>
         <div id="room-list"></div>
-    </main>
+    </section>
 
-    <div id="footer"></div>
+</main>
+
+<div id="footer"></div>
 </body>
 </html>

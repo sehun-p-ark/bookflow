@@ -3,6 +3,8 @@ package com.psh.bookflow.domain;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 
 @Entity //현재 클래스를 DB 테이블로 쓰겠음
@@ -30,6 +32,14 @@ public class User { // user 테이블
     @Column(nullable = false)
     private String password;
 
+    //생년월일
+    @Column(nullable = false)
+    private LocalDate birth;
+
+    //핸든폰번호
+    @Column(nullable = false)
+    private String phone;
+
     // 생성일
     @Column(updatable = false) // 수정(update)될 때 변경되면 안됨
     // PrePersist에서 추가함
@@ -54,9 +64,11 @@ public class User { // user 테이블
         this.updatedAt = LocalDateTime.now();
     }
 
-    public User(String email, String encodedPassword, String name) {
+    public User(String email, String encodedPassword, String name, LocalDate birth, String phone) {
         this.email = email;
         this.password = encodedPassword;
         this.name = name;
+        this.birth = birth;
+        this.phone = phone;
     }
 }

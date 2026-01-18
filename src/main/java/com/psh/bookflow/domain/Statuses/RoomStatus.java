@@ -1,4 +1,4 @@
-package com.psh.bookflow.domain;
+package com.psh.bookflow.domain.Statuses;
 
 public enum RoomStatus {
     AVAILABLE,

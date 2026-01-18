@@ -1,0 +1,106 @@
+@use "../def" as *;
+
+main {
+    min-height: calc(100vh - $header-height);
+}
+
+.auth-container {
+    @include flex(column, center, center);
+    padding: 2.5rem 0;
+    margin-top: $header-height;
+}
+
+/* 카드 */
+.auth-card {
+    width: 40rem;
+    padding: 1.875rem 2.8rem 2.4rem;
+    background-color: #ffffff;
+    border-radius: 1.6rem;
+    box-shadow: 0 0.6rem 2rem rgba(0, 0, 0, 0.08);
+    text-align: center;
+}
+
+/* 타이틀 */
+.auth-title {
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    line-height: 1.3;
+}
+
+/* Form */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    text-align: left;
+}
+
+/* label + title */
+.auth-form label {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+}
+
+.auth-form .title {
+    font-size: 1.2rem;
+    font-weight: 400;
+    color: #444;
+}
+
+/* input */
+.auth-form input {
+    height: 2.25rem;
+    padding: 0 1rem;
+    border-radius: 0.6rem;
+    border: 0.1rem solid #ddd;
+    font-size: 1.2rem;
+    background-color: #ffffff;
+}
+
+.auth-form input::placeholder {
+    color: #b0b0b0;
+}
+
+.auth-form input:focus {
+    outline: none;
+    border-color: $color-primary;
+}
+
+/* 회원가입 버튼 */
+.btn-primary {
+    margin-top: 1.25rem;
+    height: 3rem;
+    border-radius: 0.6rem;
+    border: none;
+    background-color: #6b6eff;   // 이미지와 유사한 보라톤
+    color: #ffffff;
+    font-size: 1.3rem;
+    font-weight: 600;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.btn-primary:hover {
+    background-color: $color-primary-hover;
+}
+
+/* 하단 링크 버튼 */
+.btn-secondary {
+    margin-top: 1.2rem;
+    height: 3rem;
+    border-radius: 0.6rem;
+    border: 0.1rem solid #ddd;
+    background-color: #ffffff;
+    font-size: 1.2rem;
+    color: #333;
+    text-align: center;
+    line-height: 1;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+.btn-secondary:hover {
+    background-color: #f1f3f5;
+}

@@ -11,13 +11,17 @@ public class WebMvcConfig implements WebMvcConfigurer {
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(new LoginCheckInterceptor())
-                // 로그인/회원가입은 인증 제외
+                // 정적 리소스
+                // 로그인 인증 불필요
                 .excludePathPatterns(
-                        "/users",
-                        "/users/login",
-                        "/users/logout"
+                        "/frontend/**",
+                        "/error",
+                        "/favicon.ico"
                 )
-                // 그 외 모든 요청은 로그인 필요
-                .addPathPatterns("/**");
+                // 로그인 인증 필요함
+                .addPathPatterns(
+                        "/api/users/me",
+                        "/api/reservations/**"
+                );
     }
 }

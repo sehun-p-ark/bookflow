@@ -1,8 +1,62 @@
-<header class="header">
-    <h1 class="logo">BookFlow</h1>
-    <nav class="nav">
-        <a href="/frontend/pages/index.html">홈</a>
-        <a href="/frontend/pages/accommodation.html">숙소 목록</a>
-        <a href="/frontend/pages/reservation.html">내 예약</a>
-    </nav>
-</header>
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>Header</title>
+</head>
+<body>
+    <header class="header">
+        <h1 class="logo">
+            <a href="/frontend/pages/index.html">BoolFlow</a>
+        </h1>
+        <div class="-flex-stretch"></div>
+        <section id="search-bar" class="hidden">
+            <div class="search-item date-range">
+                <label class="date-field">
+                    <input type="date" id="check-in">
+                </label>
+                <span class="date-separator">~</span>
+                <label class="date-field">
+                    <input type="date" id="check-out">
+                </label>
+            </div>
+
+            <div class="search-item guest-selector">
+                <button type="button" class="guest-display" id="guestDisplay">
+                    <img src="/frontend/images/accommodation/guest.png" alt="#"> 인원 <span id="guestCountText">2</span>
+                </button>
+                <div class="guest-panel" id="guestPanel">
+                    <div class="panel-left">
+                        <strong>인원</strong>
+                        <p>유아 및 아동도 인원수에 포함해주세요.</p>
+                    </div>
+                    <div class="panel-right">
+                        <button type="button" id="minusBtn">−</button>
+                        <span id="guestCount">2</span>
+                        <button type="button" id="plusBtn">+</button>
+                    </div>
+                </div>
+            </div>
+            <div class="-flex-stretch"></div>
+            <button class="search-btn">검색</button>
+        </section>
+
+        <div class="-flex-stretch"></div>
+
+        <nav class="nav">
+            <a href="/frontend/pages/accommodation.html">숙소 목록</a>
+
+            <!-- 🔹 비로그인 -->
+            <span id="guest-links">
+                <a href="/frontend/pages/account.html">로그인</a>
+            </span>
+
+            <!-- 🔹 로그인 -->
+            <span id="user-links" hidden>
+                <a href="/frontend/pages/account.html">내 계정</a>
+            </span>
+        </nav>
+    </header>
+
+</body>
+</html>

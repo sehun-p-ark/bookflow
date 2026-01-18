@@ -1,0 +1,321 @@
+@charset "UTF-8";
+main {
+  width: 100%;
+  min-height: calc(100vh - 6.5rem);
+}
+
+.auth-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+}
+.auth-container > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.auth-container > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.auth-container {
+  padding: 3rem 2rem 0;
+  width: 100%;
+  margin: 6.5rem auto 2rem auto;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #dcdde1;
+  border-radius: 1.2rem;
+}
+
+#profile-area .auth-card {
+  all: unset;
+}
+
+#login-area .auth-card {
+  width: 48rem;
+  padding: 3rem 2.7rem;
+  text-align: center;
+}
+#login-area .auth-card > .auth-title {
+  font-size: 1.875rem;
+  font-weight: 700;
+  margin-bottom: 2rem;
+  line-height: 1.35;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  text-align: left;
+}
+.auth-form label {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+.auth-form label .title {
+  font-size: 0.95rem;
+  font-weight: 400;
+}
+.auth-form input {
+  height: 3rem;
+  padding: 0 1.2rem;
+  border-radius: 1rem;
+  border: 0.1rem solid #dcdde1;
+  font-size: 1.4rem;
+}
+.auth-form input:focus {
+  outline: none;
+  border-color: #6b63ff;
+}
+
+.btn-primary {
+  margin-top: 2.5rem;
+  height: 3.5rem;
+  border-radius: 1rem;
+  border: none;
+  background-color: #6b63ff;
+  color: #fff;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.btn-primary:hover {
+  background-color: #7c75ff;
+}
+
+.btn-secondary {
+  margin-top: 1.2rem;
+  border-radius: 1rem;
+  border: 0.1rem solid #dcdde1;
+  background-color: #fff;
+  font-size: 1.2rem;
+  cursor: pointer;
+  text-align: center;
+  line-height: 1;
+}
+.btn-secondary:hover {
+  background-color: #f1f3f5;
+}
+
+.auth-links {
+  margin-top: 1.6rem;
+  font-size: 0.9rem;
+  color: #636e72;
+  display: flex;
+  justify-content: center;
+  gap: 0.8rem;
+}
+
+/****************************** 로그인 이후 ****************************/
+#profile-area {
+  width: 100%;
+}
+
+.account-layout {
+  display: grid;
+  grid-template-columns: 20rem 1fr;
+  width: 100%;
+  padding: 0;
+  overflow: hidden;
+  min-width: 62.5rem;
+}
+
+.account-side {
+  align-items: flex-start;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  justify-content: flex-start;
+}
+.account-side > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.account-side > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.account-side {
+  background-color: rgb(223.9642857143, 215.5, 255);
+  padding: 2.8rem 2.4rem 1.6rem 2.4rem;
+  border-right: 1px solid #dcdde1;
+  color: #000000;
+}
+.account-side .side-title {
+  font-size: 1.6rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+.account-side p {
+  font-size: 1.3rem;
+  line-height: 1.5;
+}
+.account-side p strong {
+  font-weight: 600;
+  color: #2d3436;
+}
+.account-side p span {
+  color: #636e72;
+}
+.account-side #logout-btn {
+  width: 100%;
+}
+.account-side #delete-btn {
+  width: 100%;
+  background-color: #e74c3c;
+  color: #fff;
+  height: 3.5rem;
+  border-radius: 1rem;
+  border: none;
+  margin-top: -0.6em;
+  font-size: 1.2rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+.account-side #delete-btn:hover {
+  background-color: rgb(233.7945205479, 96.8424657534, 82.7054794521);
+}
+
+.account-main {
+  min-width: 25rem;
+}
+
+#reservation-content {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+  justify-content: flex-start;
+}
+#reservation-content > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+#reservation-content > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+#reservation-content {
+  height: 100%;
+  padding: 2rem;
+  border-top-left-radius: unset;
+  border-bottom-left-radius: unset;
+}
+
+.reservation-tabs {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0.8rem;
+  justify-content: center;
+}
+.reservation-tabs > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.reservation-tabs > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.reservation-tabs {
+  width: 100%;
+  margin-bottom: 2.4rem;
+}
+.reservation-tabs .tab-label {
+  flex: 1;
+  cursor: pointer;
+}
+.reservation-tabs .tab-label .tab {
+  display: none;
+}
+.reservation-tabs .tab-label span {
+  display: block;
+  width: 100%;
+  padding: 1.2rem 0;
+  font-size: 1.4rem;
+  text-align: center;
+  border-radius: 0.8rem;
+  border: 1px solid #dcdde1;
+  background: #fff;
+  transition: all 0.2s ease;
+}
+.reservation-tabs .tab-label:hover span {
+  background-color: #f4f1ff;
+}
+.reservation-tabs .tab-label .tab:checked + span {
+  background-color: #6b63ff;
+  border-color: #6b63ff;
+  color: #fff;
+}
+
+.reservation-section {
+  width: 100%;
+}
+.reservation-section.hidden {
+  display: none;
+}
+
+.reservation-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1.6rem;
+}
+.reservation-list .card {
+  position: relative;
+  padding: 2.4rem;
+  text-align: left;
+}
+.reservation-list .card h4 {
+  font-size: 1.6rem;
+  font-weight: 600;
+  margin-bottom: 0.8rem;
+}
+.reservation-list .card h4 a:hover {
+  text-decoration: underline;
+  font-weight: 700;
+}
+.reservation-list .card p {
+  font-size: 1.4rem;
+  color: #636e72;
+  line-height: 1.6;
+}
+.reservation-list .card .btn-cancel,
+.reservation-list .card .btn-review {
+  position: absolute;
+  top: 1rem;
+  right: 1.6rem;
+  padding: 0.6rem 1.2rem;
+  border-radius: 0.6rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #fff;
+}
+.reservation-list .card .btn-cancel {
+  border: 1px solid #e74c3c;
+  color: #e74c3c;
+}
+.reservation-list .card .btn-cancel:hover {
+  background: #e74c3c;
+  color: #fff;
+}
+.reservation-list .card .btn-review {
+  border: 1px solid #1e90ff;
+  color: #1e90ff;
+}
+.reservation-list .card .btn-review:hover {
+  background: #1e90ff;
+  color: #fff;
+}
+
+/* 취소된 예약 */
+.reservation-section[data-section=CANCELED] .card {
+  opacity: 0.6;
+}
+
+/*# sourceMappingURL=account.css.map */

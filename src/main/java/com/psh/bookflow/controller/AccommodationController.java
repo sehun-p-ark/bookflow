@@ -12,7 +12,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 @RestController
-@RequestMapping("/accommodations")
+@RequestMapping("/api/accommodations")
 @RequiredArgsConstructor
 public class AccommodationController {
 
@@ -35,10 +35,14 @@ public class AccommodationController {
         return accommodationService.findAll();
     }
 
-    // 숙소 단일 조회
-    @GetMapping("/{id}")
-    public AccommodationResponse getById(@PathVariable Long id) {
-        return accommodationService.findResponseById(id);
+    // 검색 조건에 따른 숙소 조회
+    @GetMapping("/search")
+    public List<AccommodationResponse> search(
+            @RequestParam LocalDate checkIn,
+            @RequestParam LocalDate checkOut,
+            @RequestParam int guest
+    ) {
+        return accommodationService.searchAvailable(checkIn, checkOut, guest);
     }
 
     // 숙소별 객실 전체 조회
@@ -47,13 +51,25 @@ public class AccommodationController {
         return roomService.findByAccommodation(id);
     }
 
-    // 특정 기간 중 예약 가능한 객실 조회
-    @GetMapping("/{id}/rooms/available")
+    // 검색 조건에 따른 숙소 별 객실 조회
+    @GetMapping("/{id}/rooms/search")
     public List<RoomResponse> getAvailableRooms(
             @PathVariable Long id,
             @RequestParam LocalDate checkIn,
-            @RequestParam LocalDate checkOut
+            @RequestParam LocalDate checkOut,
+            @RequestParam int guest
     ) {
-        return roomService.findAvailableRooms(id, checkIn, checkOut);
+        return roomService.findAvailableRooms(
+                id,
+                checkIn,
+                checkOut,
+                guest
+        );
+    }
+
+    // 숙소 단일 조회 (필요한가???)
+    @GetMapping("/{id}")
+    public AccommodationResponse getById(@PathVariable Long id) {
+        return accommodationService.findById(id);
     }
 }

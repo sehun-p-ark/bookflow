@@ -1,30 +1,185 @@
-import {apiGet} from "../api";
+import { apiGet } from "/frontend/scripts/utils/api.js";
+import { loadHeader } from "/frontend/scripts/components/header.js";
+import { loadFooter } from "/frontend/scripts/components/footer.js";
 
-const list = document.getElementById('accommodation-list');
-
-if (!list) {
-    console.error('accommodation-list 요소를 찾을 수 없습니다.');
+loadHeader();
+loadFooter();
+// URL 상태 분기를 위한 조건
+const STATE = {
+    BROWSE: "BROWSE", // 전체 숙소 탐색
+    SEARCH: "SEARCH"  // 예약 가능 기준 탐색
 }
 
-async function loadAccommodations() {
+let state = STATE.BROWSE;
+let cached = [];
+
+const $list = document.getElementById("accommodation-list");
+const $typeCheckboxes = document.querySelectorAll(".filter-item input");
+
+// 상태 별 화면 표시 HTML
+const EMPTY_HTML = `
+    <div class="empty">
+        <img src="/frontend/images/accommodation/empty-accommodation.png" alt="#">
+        <p>조건에 맞는 숙소가 없습니다.</p>
+    </div>
+`;
+
+const LOADING_HTML = `
+    <div class="loading">
+        <img class="spinner" src="/frontend/images/accommodation/loading.png" alt="#">
+        <p>숙소를 검색 중입니다...</p>
+    </div>
+`;
+
+// URL 파라미터
+function getSearchParams() {
+    const params = new URLSearchParams(location.search);
+    return {
+        checkIn: params.get("checkIn"),
+        checkOut: params.get("checkOut"),
+        guest: params.get("guest")
+    };
+}
+
+// hasSearchCondition(객체) <- 객체에 있는 값을 꺼내쓰는 방법
+// checkIn = 객체.checkIn, 이런식으로 ㅇㅇ
+function hasSearchCondition({ checkIn, checkOut, guest }) {
+    // !! : boolean으로 강제 변환
+    return !!(checkIn && checkOut && guest);
+}
+
+async function loadAll() {
+    state = STATE.BROWSE;
+    $list.innerHTML = LOADING_HTML
+
     try {
-        const accommodations = await apiGet("/accommodations");
-
-        list.innerHTML = accommodations.map(accommodation => `
-        <div class="card">
-            <h3>${accommodation.name}</h3>
-            <p>${accommodation.address}</p>
-            <p>${accommodation.price.toLocaleString()}원</p>
-            <a href="/frontend/pages/room.html?accommodationId=${accommodation.id}">
-                방보기
-            </a>
-        </div>
-        `).join('');
-
-    } catch (e) {
-        console.error("숙소 목록 조회 실패", e);
-        list.innerHTML = "<p>숙소 정보를 불러오지 못했습니다.</p>";
+        const response = await apiGet("/accommodations");
+        cached = response;
+        renderAccommodations(response);
+    } catch {
+        $list.innerHTML = EMPTY_HTML;
     }
 }
 
-loadAccommodations();
+async function loadSearch(params) {
+    state = STATE.SEARCH;
+    $list.innerHTML = LOADING_HTML
+
+    try {
+        const qs = new URLSearchParams(params);
+        const response = await apiGet(`/accommodations/search?${qs}`);
+        cached = response;
+        renderAccommodations(response);
+    } catch {
+        $list.innerHTML = EMPTY_HTML;
+    }
+}
+
+// 숙소 리스트 렌더링
+function renderAccommodations(list) {
+    if (!list || list.length === 0) {
+        $list.innerHTML = EMPTY_HTML;
+        return;
+    }
+
+    $list.innerHTML = list.map(accommodation =>`
+        <div class="accommodation-card">
+            <div class="card-image">
+                <img src="/frontend/images/sample-hotel.jpg" alt="${accommodation.name}">
+                <span class="number">${accommodation.id}</span>
+            </div>
+
+            <div class="card-body">
+                <h3 class="name">${accommodation.name}</h3>
+
+                <div class="rating">
+                    ⭐ 4.8 <span class="review">(1,234)</span>
+                </div>
+
+                <p class="address">${accommodation.address}</p>
+
+                <div class="price-area">
+                    <span class="price">
+                        ${accommodation.minPrice
+        ? `₩${accommodation.minPrice.toLocaleString()} / 1박`
+        : "가격 정보 없음"}
+                    </span>
+                </div>
+
+                <button class="room-btn" data-id="${accommodation.id}">
+                    방보기
+                </button>
+            </div>
+        </div>
+    `).join("");
+}
+
+// 필터 체크 타입에 맞춰 숙소 보여주기
+$typeCheckboxes.forEach(cb => {
+    cb.addEventListener("change", () => {
+        const types = [...$typeCheckboxes] // 배열로 바꾸는 스프레드 array.$typeCheckboxes랑 같음
+            .filter(c => c.checked)
+            .map(c => c.value);
+
+        // 아무것도 체크되지 않았다면 전체 로드
+        if (types.length === 0) {
+            renderAccommodations(cached);
+            return;
+        }
+
+        renderAccommodations(
+            cached.filter(a => types.includes(a.category))
+        );
+    });
+});
+
+// 방보기 버튼 눌렀을 때 room으로 이동
+$list.addEventListener("click", (e) => {
+    // closest : 자신부터 부모요소로 올라가면서 dom요소 찾기
+    const btn = e.target.closest(".room-btn");
+    // btn안 말고 다른 곳 클릭하면 바로 return
+    if (!btn) return;
+
+    moveToRoom(btn.dataset.id);
+});
+
+
+// URL 뒤에 조건 값들이 있으면 -> 해당 방들만 조회
+//                     없으면 -> 전부 조회
+function moveToRoom(accommodationId) {
+    const params = getSearchParams();
+
+    if (state === STATE.SEARCH) {
+        location.href =
+            "/frontend/pages/room.html?" +
+            new URLSearchParams({
+                accommodationId,
+                ...params
+            });
+    } else {
+        location.href =
+            `/frontend/pages/room.html?accommodationId=${accommodationId}`;
+    }
+}
+
+// header 검색버튼 새로 눌렀을 때
+window.addEventListener("search:change", (e) => {
+    history.pushState({}, "", "?" + new URLSearchParams(e.detail));
+    loadSearch(e.detail);
+});
+// 뒤로가기 버튼 눌렀을 때 원래 값 복원
+window.addEventListener("popstate", init);
+
+// 최초 실행 로직
+function init() {
+    const params = getSearchParams();
+
+    if(hasSearchCondition(params)) {
+        loadSearch(params);
+    } else {
+        loadAll();
+    }
+}
+
+// 최초 실행
+init();

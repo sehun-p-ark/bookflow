@@ -1,8 +1,7 @@
 package com.psh.bookflow.repository;
 
 import com.psh.bookflow.domain.Reservation;
-import com.psh.bookflow.domain.ReservationStatus;
-import com.psh.bookflow.dto.reservation.ReservationResponse;
+import com.psh.bookflow.domain.Statuses.ReservationStatus;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -31,10 +30,10 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     );
 
     // 객실 ID 기준 예약 확인
-    List<ReservationResponse> findByRoomId(Long roomId);
+    List<Reservation> findByRoomId(Long roomId);
 
     // 유저 ID 기준 예약 확인
-    List<ReservationResponse> findByUserId(Long userId);
+    List<Reservation> findByUserId(Long userId);
 
     // 겹치는 예약이 존재하는 roomId 목록 구하기
     @Query("""
@@ -48,7 +47,7 @@ public interface ReservationRepository extends JpaRepository<Reservation, Long> 
     List<Long> findReservedRoomIds(
             @Param("accommodationId") Long accommodationId,
             @Param("statuses") EnumSet<ReservationStatus> statuses,
-            @Param("checkOutDate") LocalDate checkOutDate,
-            @Param("checkInDate") LocalDate checkInDate
+            @Param("checkInDate") LocalDate checkInDate,
+            @Param("checkOutDate") LocalDate checkOutDate
     );
 }

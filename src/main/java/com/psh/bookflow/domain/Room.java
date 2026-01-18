@@ -1,5 +1,6 @@
 package com.psh.bookflow.domain;
 
+import com.psh.bookflow.domain.Statuses.RoomStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,10 +32,6 @@ public class Room {
     @Column(nullable = false, length = 20)
     private RoomStatus status = RoomStatus.AVAILABLE;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "accommodation_id", nullable = false)
-    private Accommodation accommodation;
-
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
 
@@ -51,6 +48,10 @@ public class Room {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "accommodation_id", nullable = false)
+    private Accommodation accommodation;
 
     public Room(String name, String description, Integer price, Integer capacity, Accommodation accommodation) {
         this.name = name;

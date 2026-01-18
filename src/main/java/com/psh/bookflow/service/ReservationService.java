@@ -1,6 +1,8 @@
 package com.psh.bookflow.service;
 
 import com.psh.bookflow.domain.*;
+import com.psh.bookflow.domain.Statuses.ReservationStatus;
+import com.psh.bookflow.domain.Statuses.RoomStatus;
 import com.psh.bookflow.dto.reservation.ReservationResponse;
 import com.psh.bookflow.exception.ErrorCode;
 import com.psh.bookflow.exception.ReservationException;
@@ -72,9 +74,12 @@ public class ReservationService {
 
     // 예약 확정 (요청 -> 확정)
     @Transactional
-    public void confirm(Long reservationId) {
+    public void confirm(Long reservationId, Long loginUserId) {
         Reservation reservation = getReservation(reservationId);
 
+        if (!reservation.getUser().getId().equals(loginUserId)) {
+            throw new ReservationException(ErrorCode.FORBIDDEN);
+        }
         if (reservation.getStatus() != ReservationStatus.REQUESTED) {
             throw new ReservationException(ErrorCode.RESERVATION_INVALID_STATUS);
         }
@@ -84,9 +89,12 @@ public class ReservationService {
 
     // 예약 취소 (요청/확정 -> 취소)
     @Transactional
-    public void cancel(Long reservationId) {
+    public void cancel(Long reservationId, Long loginUserId) {
         Reservation reservation = getReservation(reservationId);
 
+        if (!reservation.getUser().getId().equals(loginUserId)) {
+            throw new ReservationException(ErrorCode.FORBIDDEN);
+        }
         if (reservation.getStatus() == ReservationStatus.CANCELED) {
             return;
         }
@@ -97,11 +105,14 @@ public class ReservationService {
         reservation.cancel();
     }
 
-    // 예약 완료 (혹정 -> 완료)
+    // 예약 완료 (확정 -> 완료)
     @Transactional
-    public void complete(Long reservationId) {
+    public void complete(Long reservationId, Long loginUserId) {
         Reservation reservation = getReservation(reservationId);
 
+        if (!reservation.getUser().getId().equals(loginUserId)) {
+            throw new ReservationException(ErrorCode.FORBIDDEN);
+        }
         if (reservation.getStatus() != ReservationStatus.CONFIRMED) {
             throw new ReservationException(ErrorCode.RESERVATION_INVALID_STATUS);
         }
@@ -111,12 +122,21 @@ public class ReservationService {
 
     // 객실별 예약 상태 조회
     public List<ReservationResponse> findByRoom(Long roomId) {
-        return reservationRepository.findByRoomId(roomId);
+        return reservationRepository.findByRoomId(roomId)
+                //Reservation 리스트들을 풀어헤친다.
+                .stream()
+                // 람다식임 (의미는 .map(reservation -> new ReservationResponse(reservation);
+                .map(ReservationResponse::new)
+                // 다시 List형태로 묶어서 DTO LIST로 전환 완료
+                .toList();
     }
 
     // 유저별 예약 상태 조회
     public List<ReservationResponse> findByUser(Long userId) {
-        return reservationRepository.findByUserId(userId);
+        return reservationRepository.findByUserId(userId)
+                .stream()
+                .map(ReservationResponse::new)
+                .toList();
     }
 
     // 예약 상태 전부 조회

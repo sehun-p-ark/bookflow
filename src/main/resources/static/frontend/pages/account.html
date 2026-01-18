@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>내 계정</title>
+
+    <link rel="stylesheet" href="/frontend/styles/common.css">
+    <link rel="stylesheet" href="/frontend/styles/components/header.css">
+    <link rel="stylesheet" href="/frontend/styles/components/footer.css">
+    <link rel="stylesheet" href="/frontend/styles/pages/account.css">
+
+    <script type="module" src="/frontend/scripts/pages/account.js"></script>
+</head>
+<body>
+
+<div id="header"></div>
+
+<main>
+    <div class="page-container auth-container">
+
+        <!-- 🔹 비로그인 영역 -->
+        <section id="login-area">
+            <div class="card auth-card">
+                <h2 class="auth-title">
+                    이메일로<br>
+                    로그인해 주세요
+                </h2>
+
+                <form id="login-form" class="auth-form">
+                    <label>
+                        <span class="title">이메일(아이디)</span>
+                        <input type="email" id="email" required>
+                    </label>
+
+                    <label>
+                        <span class="title">비밀번호</span>
+                        <input type="password" id="password" required>
+                    </label>
+
+                    <button type="submit" class="btn-primary">로그인하기</button>
+                    <a href="/frontend/pages/signup.html" class="btn-secondary">
+                        이메일로 가입하기
+                    </a>
+                </form>
+
+                <div class="auth-links">
+                    <a href="#">아이디 찾기</a>
+                    <span>|</span>
+                    <a href="#">비밀번호 재설정</a>
+                </div>
+            </div>
+        </section>
+
+        <!-- 🔹 로그인 후 영역 -->
+        <section id="profile-area" hidden>
+            <div class="account-layout card">
+
+                <!-- 사용자 정보 -->
+                <aside class="account-side">
+                    <h3 class="side-title">내 정보</h3>
+                    <p><strong>이메일</strong><br>
+                        <span id="user-email"></span>
+                    </p>
+                    <p><strong>이름</strong><br>
+                        <span id="user-name"></span>
+                    </p>
+                    <div class="-flex-stretch"></div>
+                    <button id="logout-btn" class="btn-primary">
+                        로그아웃
+                    </button>
+                    <button id="delete-btn" class="btn-delete">
+                        회원탈퇴
+                    </button>
+                </aside>
+
+                <!-- 예약 정보  -->
+                <section class="account-main">
+                    <section id="reservation-content" class="card">
+
+                        <nav class="reservation-tabs">
+                            <label class="tab-label">
+                                <input checked type="radio" name="reservation-tab" data-status="UPCOMING" class="tab">
+                                <span>이용 전</span>
+                            </label>
+                            <label class="tab-label">
+                                <input type="radio" name="reservation-tab" data-status="COMPLETED" class="tab">
+                                <span>이용 후</span>
+                            </label>
+                            <label class="tab-label">
+                                <input type="radio" name="reservation-tab" data-status="CANCELED" class="tab">
+                                <span>취소 됨</span>
+                            </label>
+                        </nav>
+
+                        <section class="reservation-section" data-section="UPCOMING">
+                            <div class="reservation-list"></div>
+                        </section>
+
+                        <section class="reservation-section hidden" data-section="COMPLETED">
+                            <div class="reservation-list"></div>
+                        </section>
+
+                        <section class="reservation-section hidden" data-section="CANCELED">
+                            <div class="reservation-list"></div>
+                        </section>
+
+                    </section>
+                </section>
+            </div>
+        </section>
+
+    </div>
+</main>
+
+<div id="footer"></div>
+
+</body>
+</html>

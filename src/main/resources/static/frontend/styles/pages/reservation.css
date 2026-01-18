@@ -1,0 +1,115 @@
+@charset "UTF-8";
+.reservation-page {
+  min-height: calc(100vh - 6.5rem - 4rem);
+  padding: 4rem 2rem;
+  background: #ffffff;
+  margin-top: 6.5rem;
+}
+
+.reservation-container {
+  max-width: 72rem;
+  margin: 0 auto;
+  padding: 3rem 0 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+
+.card {
+  background: #fff;
+  border: 1px solid #dcdde1;
+  border-radius: 1.6rem;
+  padding: 3rem;
+}
+
+.room-summary {
+  text-align: center;
+}
+.room-summary .room-name {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin-bottom: 0.6rem;
+}
+.room-summary .accommodation-name {
+  font-size: 1.5rem;
+  color: #636e72;
+  margin-bottom: 1.6rem;
+}
+.room-summary .room-price {
+  font-size: 1.8rem;
+  font-weight: 700;
+  color: #6b63ff;
+}
+
+.reservation-form {
+  display: flex;
+  flex-direction: column;
+  gap: 2.4rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+}
+.form-group label {
+  font-size: 1.4rem;
+  font-weight: 600;
+}
+
+/* 날짜 */
+.date-range {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+.date-range input {
+  flex: 1;
+  height: 4.4rem;
+  padding: 0 1.2rem;
+  border-radius: 1.2rem;
+  border: 1px solid #dcdde1;
+  font-size: 1.4rem;
+}
+.date-range input:focus {
+  outline: none;
+  border-color: #6b63ff;
+}
+.date-range span {
+  font-size: 1.6rem;
+}
+
+/* 인원 */
+.guest-count {
+  font-size: 1.5rem;
+  color: #2d3436;
+}
+
+.price-summary {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding-top: 2rem;
+  border-top: 1px solid #dcdde1;
+}
+.price-summary span {
+  font-size: 1.5rem;
+  color: #636e72;
+}
+.price-summary strong {
+  font-size: 2.2rem;
+  font-weight: 700;
+}
+
+#reserve-btn {
+  margin-top: 1.6rem;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.7rem;
+  font-weight: 700;
+  border-radius: 1.4rem;
+}
+
+/*# sourceMappingURL=reservation.css.map */

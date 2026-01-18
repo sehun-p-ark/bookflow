@@ -3,27 +3,49 @@
 <head>
     <meta charset="UTF-8">
     <title>숙소 목록</title>
-    <link rel="stylesheet" href="../styles/reset.css">
-    <link rel="stylesheet" href="../styles/layout.css">
-    <link rel="stylesheet" href="../styles/components.css">
-    <script type="module" src="../scripts/pages/accommodation.js"></script>
+    <link rel="stylesheet" href="/frontend/styles/common.css">
+    <link rel="stylesheet" href="/frontend/styles/components/footer.css">
+    <link rel="stylesheet" href="/frontend/styles/components/header.css">
+    <link rel="stylesheet" href="/frontend/styles/pages/accommodation.css">
+    <script type="module" src="/frontend/scripts/pages/accommodation.js"></script>
 </head>
 <body>
     <div id="header"></div>
 
-    <main>
-        <h2 class="page-title">숙소 목록</h2>
-        <div id="accommodation-list"></div>
+    <main id="main">
+        <section class="content-area">
+            <aside class="filter-area">
+                <h3 class="filter-title">필터</h3>
+
+                <div class="filter-group">
+                    <p class="type">숙소 유형</p>
+                    <label class="filter-item">
+                        <input type="checkbox" value="HOTEL">
+                        <span>호텔</span>
+                    </label>
+                    <label class="filter-item">
+                        <input type="checkbox" value="RESORT">
+                        <span>리조트</span>
+                    </label>
+                    <label class="filter-item">
+                        <input type="checkbox" value="PENSION">
+                        <span>펜션</span>
+                    </label>
+                    <label class="filter-item">
+                        <input type="checkbox" value="MOTEL">
+                        <span>모텔</span>
+                    </label>
+                </div>
+            </aside>
+
+            <!-- 우측 리스트 -->
+            <section class="list-area">
+                <div id="accommodation-list"></div>
+            </section>
+        </section>
     </main>
 
+
     <div id="footer"></div>
-
-    <script type="module">
-        import { loadHeader } from "../scripts/components/header.js";
-        import { loadFooter } from "../scripts/components/footer.js";
-
-        loadHeader();
-        loadFooter();
-    </script>
 </body>
 </html>

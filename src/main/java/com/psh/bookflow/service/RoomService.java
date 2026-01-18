@@ -1,10 +1,12 @@
 package com.psh.bookflow.service;
 
 import com.psh.bookflow.domain.Accommodation;
-import com.psh.bookflow.domain.ReservationStatus;
+import com.psh.bookflow.domain.Statuses.ReservationStatus;
 import com.psh.bookflow.domain.Room;
 import com.psh.bookflow.dto.room.RoomRequest;
 import com.psh.bookflow.dto.room.RoomResponse;
+import com.psh.bookflow.exception.ErrorCode;
+import com.psh.bookflow.exception.RoomException;
 import com.psh.bookflow.repository.AccommodationRepository;
 import com.psh.bookflow.repository.ReservationRepository;
 import com.psh.bookflow.repository.RoomRepository;
@@ -24,7 +26,6 @@ public class RoomService {
 
     private final RoomRepository roomRepository;
     private final AccommodationRepository accommodationRepository;
-    private final ReservationRepository reservationRepository;
 
     private static final EnumSet<ReservationStatus> ACTIVE_STATUSES =
             EnumSet.of(ReservationStatus.REQUESTED, ReservationStatus.CONFIRMED);
@@ -38,7 +39,7 @@ public class RoomService {
         Accommodation accommodation =
                 accommodationRepository.findById(request.getAccommodationId())
                         .orElseThrow(() ->
-                                new IllegalArgumentException("숙소를 찾을 수 없습니다. id=" + request.getAccommodationId())
+                                new RoomException(ErrorCode.ACCOMMODATION_NOT_FOUND)
                         );
 
         Room room = new Room(request.getName(), request.getDescription(), request.getPrice(), request.getCapacity(), accommodation);
@@ -62,15 +63,9 @@ public class RoomService {
     }
 
     // 특정 기간에 예약 가능한 객실 조회
-    public List<RoomResponse> findAvailableRooms(Long accommodationId, LocalDate checkIn, LocalDate checkOut) {
+    public List<RoomResponse> findAvailableRooms(Long accommodationId, LocalDate checkIn, LocalDate checkOut, int guest) {
 
-        // 1) 해당 기간에 이미 예약된 roomId 목록
-        List<Long> reservedRoomIds = reservationRepository.findReservedRoomIds(accommodationId, ACTIVE_STATUSES, checkOut, checkIn);
-
-        // 2) 예약된 객실 제외하고 조회
-        List<Room> availableRooms = reservedRoomIds.isEmpty()
-                ? roomRepository.findByAccommodationId(accommodationId)
-                : roomRepository.findByAccommodationIdAndIdNotIn(accommodationId, reservedRoomIds);
+        List<Room> availableRooms = roomRepository.findAvailableRooms(accommodationId, ACTIVE_STATUSES, checkIn, checkOut, guest);
 
         return availableRooms.stream()
                 .map(RoomResponse::new)
@@ -81,7 +76,7 @@ public class RoomService {
     private Room getRoom(Long roomId) {
         return roomRepository.findById(roomId)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("객실을 찾을 수 없습니다. id=" + roomId)
+                        new RoomException(ErrorCode.ROOM_NOT_FOUND)
                 );
     }
 }

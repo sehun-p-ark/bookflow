@@ -1,0 +1,67 @@
+@charset "UTF-8";
+main {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+}
+main > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+main > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+main ::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background-image: url("/frontend/images/mainpage.jpg");
+  background-size: cover;
+  background-position: center;
+  opacity: 0.4;
+  z-index: -999;
+}
+
+.page-container {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  justify-content: center;
+}
+.page-container > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.page-container > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.page-container {
+  min-height: calc(100vh - 4rem - 0.1rem);
+  max-width: 80rem;
+}
+
+/* index 페이지 전용 */
+.index-page {
+  text-align: center;
+}
+
+/* 제목 */
+.index-page .page-title {
+  font-size: 3.2rem;
+  font-weight: 800;
+  margin-bottom: 2rem;
+}
+
+/* 소개 문구 */
+.index-page #intro-text {
+  font-size: 1.6rem;
+  color: #636e72;
+  line-height: 1.6;
+}
+
+/*# sourceMappingURL=index.css.map */

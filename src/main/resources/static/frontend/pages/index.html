@@ -3,21 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <title>BookFlow</title>
-    <link rel="stylesheet" href="../styles/reset.css">
-    <link rel="stylesheet" href="../styles/layout.css">
-    <link rel="stylesheet" href="../styles/main.css">
-    <script type="module" src="../scripts/pages/index.js"></script>
+    <link rel="stylesheet" href="/frontend/styles/common.css">
+    <link rel="stylesheet" href="/frontend/styles/components/footer.css">
+    <link rel="stylesheet" href="/frontend/styles/components/header.css">
+    <link rel="stylesheet" href="/frontend/styles/pages/index.css">
+    <script type="module" src="/frontend/scripts/pages/index.js"></script>
 </head>
 <body>
+    <div id="header"></div>
 
-<div id="header"></div>
+    <main>
+        <div class="page-container">
+            <h2 class="page-title">환영합니다</h2>
+            <p id="intro-text"></p>
+        </div>
+    </main>
 
-<main>
-    <h2 class="page-title">환영합니다</h2>
-    <p id="intro-text"></p>
-</main>
 
-<div id="footer"></div>
+    <div id="footer"></div>
 
 </body>
 </html>

@@ -1,7 +1,7 @@
 package com.psh.bookflow.dto.room;
 
 import com.psh.bookflow.domain.Room;
-import com.psh.bookflow.domain.RoomStatus;
+import com.psh.bookflow.domain.Statuses.RoomStatus;
 import lombok.Getter;
 
 @Getter

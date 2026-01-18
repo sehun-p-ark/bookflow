@@ -9,6 +9,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Service
@@ -20,15 +21,15 @@ public class UserService {
 
     // 회원가입
     @Transactional
-    public User register(String email, String rawPassword, String name) {
+    public User register(String email, String rawPassword, String name, LocalDate birth, String phone) {
         // 이메일 중복 체크
-        if (userRepository.findByEmail(email).isPresent()) {
+        if (userRepository.existsByEmail(email)) {
             throw new UserException(ErrorCode.USER_EMAIL_DUPLICATED);
         }
         // 비밀번호 암호화
         String encodedPassword = passwordEncoder.encode(rawPassword);
         // User 생성 (암호화된 비밀번호 사용)
-        User user = new User(email, encodedPassword, name);
+        User user = new User(email, encodedPassword, name, birth, phone);
 
         return userRepository.save(user);
     }
@@ -53,8 +54,15 @@ public class UserService {
 
 
     // Email로 회원 찾기
-    public User getByEmail(String email) {
-        return userRepository.findByEmail(email)
+//    public User getByEmail(String email) {
+//        return userRepository.findByEmail(email)
+//                .orElseThrow(() ->
+//                        new UserException(ErrorCode.USER_NOT_FOUND)
+//                );
+//    }
+
+    public User getById(Long id) {
+        return userRepository.findById(id)
                 .orElseThrow(() ->
                         new UserException(ErrorCode.USER_NOT_FOUND)
                 );

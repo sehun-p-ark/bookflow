@@ -1,11 +1,13 @@
 package com.psh.bookflow.domain;
 
+import com.psh.bookflow.domain.Statuses.AccommodationStatus;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -50,6 +52,20 @@ public class Accommodation {
         this.updatedAt = LocalDateTime.now();
     }
 
+    @OneToMany(
+            mappedBy = "accommodation",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<AccommodationImage> images = new ArrayList<>();
+
+    @OneToMany(
+            mappedBy = "accommodation",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<Room> rooms = new ArrayList<>();
+
     @PreUpdate
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
@@ -71,5 +87,6 @@ public class Accommodation {
         this.category = category;
         this.owner = owner;
     }
+
 }
 

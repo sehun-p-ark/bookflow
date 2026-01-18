@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <title>회원가입</title>
+    <link rel="stylesheet" href="/frontend/styles/common.css">
+    <link rel="stylesheet" href="/frontend/styles/pages/signup.css">
+    <link rel="stylesheet" href="../styles/components/header.css">
+    <script defer type="module" src="/frontend/scripts/pages/signup.js"></script>
+</head>
+
+<body>
+    <div id="header"></div>
+
+    <main>
+        <div class="auth-container">
+            <section class="card auth-card">
+                <h2 class="auth-title">
+                    회원가입
+                </h2>
+
+                <form id="signup-form" class="auth-form">
+
+                    <label data-object="label">
+                        <span class="title">이메일</span>
+                        <input type="email" id="email" placeholder="example@email.com" required autofocus>
+                    </label>
+
+                    <label data-object="label">
+                        <span class="title">비밀번호</span>
+                        <input type="password" id="password" required>
+                    </label>
+
+                    <label data-object="label">
+                        <span class="title">비밀번호 확인</span>
+                        <input type="password" id="password-check" required>
+                    </label>
+
+                    <label data-object="label">
+                        <span class="title">이름</span>
+                        <input type="text" id="name" required>
+                    </label>
+
+                    <label data-object="label">
+                        <span class="title">휴대폰 번호</span>
+                        <input type="text" id="phone" placeholder="01012345678" required maxlength="11" minlength="11">
+                    </label>
+
+                    <label data-object="label">
+                        <span class="title">생년월일</span>
+                        <input type="date" id="birth" required>
+                    </label>
+
+                    <button type="submit" class="btn-primary">
+                        회원가입
+                    </button>
+
+                    <a href="/frontend/pages/account.html" class="btn-secondary">
+                        이미 계정이 있어요
+                    </a>
+                </form>
+            </section>
+        </div>
+    </main>
+
+</body>
+</html>

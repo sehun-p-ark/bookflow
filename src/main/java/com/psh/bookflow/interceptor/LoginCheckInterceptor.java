@@ -15,6 +15,11 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             HttpServletResponse response,
             Object handler
     ) {
+        // 회원가입 로그인 인증 제외
+        if (request.getRequestURI().equals("/users")
+                && request.getMethod().equalsIgnoreCase("POST")) {
+            return true;
+        }
         // 세션 가져오기 (없으면 null)
         HttpSession session = request.getSession(false);
 
@@ -23,6 +28,10 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             // 로그인 안 된 상태 → 예외 발생
             throw new UserException(ErrorCode.UNAUTHORIZED);
         }
+
+        // 로그인 사용자 ID를 request에 저장
+        Long userId = (Long) session.getAttribute("LOGIN_USER_ID");
+        request.setAttribute("LOGIN_USER_ID", userId);
 
         // 로그인 된 상태 → 컨트롤러로 진행
         return true;

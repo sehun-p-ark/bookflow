@@ -1,0 +1,52 @@
+$color-primary: #6b63ff;
+$color-primary-hover: #7c75ff;
+$color-primary-active: #5a52e6;
+
+$color-bg-main: #f5f6fa;
+$color-bg-white: #ffffff;
+
+$color-text-main: #2d3436;
+$color-text-sub: #636e72;
+$color-text-light: #b2bec3;
+
+$color-bg-header: #f4f1ff;
+$color-bg-footer: #f8f9fa;
+
+$color-border: #dcdde1;
+$color-danger: #d63031;
+
+$font-base: 'Pretendard',
+-apple-system,
+BlinkMacSystemFont,
+'Apple SD Gothic Neo',
+'Noto Sans KR',
+'Segoe UI',
+Roboto,
+Helvetica,
+Arial,
+sans-serif;
+
+$radius-sm: 0.6rem;
+$radius-md: 1rem;
+$radius-lg: 1.2rem;
+
+$header-height: 6.5rem;
+$footer-height: 4rem;
+
+@mixin flex($flex-direction, $justify-content, $align-items, $gap: 0) {
+    align-items: $align-items;
+    display: flex;
+    flex-direction: $flex-direction;
+    gap: $gap;
+    justify-content: $justify-content;
+
+    > * {
+        flex-grow: 0;
+        flex-shrink: 0;
+    }
+
+    > .-flex-stretch {
+        flex-grow: 1;
+        flex-shrink: 1;
+    }
+}

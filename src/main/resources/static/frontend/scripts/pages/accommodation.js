@@ -15,6 +15,8 @@ let cached = [];
 
 const $list = document.getElementById("accommodation-list");
 const $typeCheckboxes = document.querySelectorAll(".filter-item input");
+const $resetBtn = document.querySelector(".reload");
+const $facilityButtons = document.querySelectorAll(".filter-group .facilities");
 
 // 상태 별 화면 표시 HTML
 const EMPTY_HTML = `
@@ -132,6 +134,23 @@ $typeCheckboxes.forEach(cb => {
         );
     });
 });
+
+// 필터 초기화 (숙소유형/시설 UI 상태 리셋)
+function resetFilters() {
+    $typeCheckboxes.forEach(cb => {
+        cb.checked = false;
+    });
+
+    $facilityButtons.forEach(btn => {
+        btn.classList.remove("active");
+        btn.setAttribute("aria-pressed", "false");
+    });
+
+    renderAccommodations(cached);
+}
+
+$resetBtn?.addEventListener("click", resetFilters);
+
 
 // 방보기 버튼 눌렀을 때 room으로 이동
 $list.addEventListener("click", (e) => {

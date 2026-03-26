@@ -37,7 +37,7 @@ public class RoomController {
         return ResponseEntity.ok(response);
     }
 
-    // 객실 예약 여부 조회 (로그인 불필요) // 관리자용
+    // 객실 예약 여부 조회 (로그인 불필요)
     @GetMapping("/{id}/reservations")
     public List<ReservationResponse> getReservationsByRoom(
             @PathVariable("id") Long roomId

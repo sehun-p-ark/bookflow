@@ -4,7 +4,7 @@ import { loadFooter } from "/frontend/scripts/components/footer.js";
 loadHeader();
 loadFooter();
 
-const introText = document.getElementById('intro-text');
+const introText = document.querySelector('.intro-text');
 
 if (!introText) {
     console.error('intro-text 요소를 찾을 수 없습니다.');

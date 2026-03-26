@@ -7,6 +7,8 @@
 }
 
 body {
+    position: relative;
+    height: 100%;
     background-color: $color-bg-main;
     color: $color-text-main;
     font-family: $font-base;

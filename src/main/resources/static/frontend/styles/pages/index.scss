@@ -3,7 +3,7 @@
 main {
     @include flex(column, center, center);
 
-    ::before {
+    &:before {
         content: "";
         position: absolute;
         inset: 0;
@@ -16,25 +16,24 @@ main {
 }
 
 .page-container {
-    @include flex(column, center, center, 1rem);
+    @include flex(column, flex-start, center, 1rem);
     min-height: calc(100vh - $footer-height - 0.1rem);
     max-width: 80rem;
-}
-/* index 페이지 전용 */
-.index-page {
-    text-align: center;
-}
+    padding-top: 10rem;
 
-/* 제목 */
-.index-page .page-title {
-    font-size: 3.2rem;
-    font-weight: 800;
-    margin-bottom: 2rem;
-}
+    > .page-title {
+        font-size: 2rem;
+    }
 
-/* 소개 문구 */
-.index-page #intro-text {
-    font-size: 1.6rem;
-    color: $color-text-sub;
-    line-height: 1.6;
+    > .intro-text {
+        font-size: 1.2rem;
+        padding-bottom: 1rem;
+    }
+
+    > a {
+        background-color: #D8CEC6;
+        &:hover {
+            text-decoration: underline;
+        }
+    }
 }

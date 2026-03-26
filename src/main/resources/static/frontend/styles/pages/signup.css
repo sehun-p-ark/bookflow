@@ -1,6 +1,6 @@
 @charset "UTF-8";
 main {
-  min-height: calc(100vh - 6.5rem);
+  min-height: calc(100vh - 4rem);
 }
 
 .auth-container {
@@ -20,7 +20,7 @@ main {
 }
 .auth-container {
   padding: 2.5rem 0;
-  margin-top: 6.5rem;
+  margin-top: 4rem;
 }
 
 /* 카드 */
@@ -96,7 +96,7 @@ main {
 }
 
 .btn-primary:hover {
-  background-color: #7c75ff;
+  background-color: #d8d8d8;
 }
 
 /* 하단 링크 버튼 */

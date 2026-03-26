@@ -19,16 +19,6 @@ public class AccommodationController {
     private final AccommodationService accommodationService;
     private final RoomService roomService;
 
-    // 숙소등록 이거 아직 User 인증 때문에 못만드는 중 ㅠㅠ
-//    @PostMapping
-//    public ResponseEntity<AccommodationResponse> create(
-//            @RequestBody AccommodationRequest request
-//    ) {
-//        AccommodationResponse response = accommodationService.create(request);
-//
-//        return ResponseEntity.ok(response);
-//    }
-
     // 숙소 전체 조회
     @GetMapping
     public List<AccommodationResponse> getAll() {

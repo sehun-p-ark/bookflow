@@ -20,7 +20,7 @@ import java.util.List;
 
 @Service
 @RequiredArgsConstructor
-@Transactional(readOnly = true)
+@Transactional(readOnly = true) // 조회용 트랜잭션
 public class ReservationService {
 
     private final ReservationRepository reservationRepository;
@@ -34,14 +34,14 @@ public class ReservationService {
     // 예약 생성하기
     @Transactional
     public Long create(Long userId, Long roomId, LocalDate checkIn, LocalDate checkOut) {
-        validateDates(checkIn, checkOut);
+        validateDates(checkIn, checkOut); // 날짜 검증
 
-        User user = userRepository.findById(userId)
+        User user = userRepository.findById(userId) // 유저 검증
                 .orElseThrow(() ->
                         new ReservationException(ErrorCode.USER_NOT_FOUND)
                 );
 
-        Room room = roomRepository.findById(roomId)
+        Room room = roomRepository.findById(roomId) // 객실 검증
                 .orElseThrow(() ->
                         new ReservationException(ErrorCode.ROOM_NOT_FOUND));
 
@@ -59,32 +59,36 @@ public class ReservationService {
         );
 
 
-        if (overlapped) {
+        if (overlapped) { //만약에 겹치면 예외 발생
             throw new ReservationException(ErrorCode.RESERVATION_OVERLAPPED);
         }
 
+        // 숙박 일수 계산하기
         long nights = ChronoUnit.DAYS.between(checkIn, checkOut); // checkOut은 다음날이어야 하므로 1 이상
+        // 총 가격 계산하기
         long totalPrice = nights * room.getPrice();
-
+        // 예약 엔티티 생성
         Reservation reservation = new Reservation(user, room, checkIn, checkOut, totalPrice);
         // 기본값: REQUESTED (엔티티에서 기본 세팅되어 있다는 전제)
 
+        //DB에 저장
         return reservationRepository.save(reservation).getId();
     }
 
     // 예약 확정 (요청 -> 확정)
     @Transactional
     public void confirm(Long reservationId, Long loginUserId) {
-        Reservation reservation = getReservation(reservationId);
+        Reservation reservation = getReservation(reservationId); // 예약 조회하기
 
-        if (!reservation.getUser().getId().equals(loginUserId)) {
+        if (!reservation.getUser().getId().equals(loginUserId)) { // 본인 예약인지 유저 확인
             throw new ReservationException(ErrorCode.FORBIDDEN);
         }
-        if (reservation.getStatus() != ReservationStatus.REQUESTED) {
+
+        if (reservation.getStatus() != ReservationStatus.REQUESTED) { // 요청 상태인지 확인하기
             throw new ReservationException(ErrorCode.RESERVATION_INVALID_STATUS);
         }
 
-        reservation.confirm();
+        reservation.confirm(); // 요청 > 확정 상태로 변경
     }
 
     // 예약 취소 (요청/확정 -> 취소)

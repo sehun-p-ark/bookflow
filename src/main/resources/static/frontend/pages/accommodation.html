@@ -15,10 +15,16 @@
     <main id="main">
         <section class="content-area">
             <aside class="filter-area">
-                <h3 class="filter-title">필터</h3>
+                <div class="filter-title">
+                    <span class="title">필터</span>
+                    <button class="reload" type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960"><path d="M480-160q-134 0-227-93t-93-227q0-134 93-227t227-93q69 0 132 28.5T720-690v-110h80v280H520v-80h168q-32-56-87.5-88T480-720q-100 0-170 70t-70 170q0 100 70 170t170 70q77 0 139-44t87-116h84q-28 106-114 173t-196 67Z"/></svg>
+                        <span>초기화</span>
+                    </button>
+                </div>
 
                 <div class="filter-group">
-                    <p class="type">숙소 유형</p>
+                    <p class="type">숙소유형</p>
                     <label class="filter-item">
                         <input type="checkbox" value="HOTEL">
                         <span>호텔</span>
@@ -35,6 +41,18 @@
                         <input type="checkbox" value="MOTEL">
                         <span>모텔</span>
                     </label>
+                </div>
+
+                <div class="filter-group">
+                    <p class="type">시설</p>
+                    <button class="facilities" type="button"><span>오티티</span></button>
+                    <button class="facilities" type="button"><span>셀프 체크인</span></button>
+                    <button class="facilities" type="button"><span>무선 인터넷</span></button>
+                    <button class="facilities" type="button"><span>주차장</span></button>
+                    <button class="facilities" type="button"><span>수영장</span></button>
+                    <button class="facilities" type="button"><span>노래방</span></button>
+                    <button class="facilities" type="button"><span>미니바</span></button>
+                    <button class="facilities" type="button"><span>반신욕</span></button>
                 </div>
             </aside>
 

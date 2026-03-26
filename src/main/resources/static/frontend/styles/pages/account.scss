@@ -1,26 +1,23 @@
 @use "../def" as *;
 @use "sass:color";
 
-main {
-    width: 100%;
-    min-height: calc(100vh - $header-height);
+#main {
+    @include flex(column, center, center);
+    //최소한 높이가 100vh에서 header, footer빼고 border 높이 뺀거임
+    min-height: calc(100vh - $header-height - $footer-height - 0.125rem);
+    margin: $header-height auto 0;
 }
 
 .auth-container {
     @include flex(column, center, center);
-    padding: 3rem 2rem 0;
+    padding: 0 3rem;
     width: 100%;
-    margin: $header-height auto 2rem auto;
 }
 
 .card {
     background: #fff;
     border: 1px solid $color-border;
     border-radius: 1.2rem;
-}
-
-#profile-area .auth-card {
-    all: unset;
 }
 
 #login-area .auth-card {
@@ -128,13 +125,24 @@ main {
     color: #000000;
 
     .side-title {
-        font-size: 1.6rem;
-        font-weight: 700;
+        @include flex(row, stretch, center);
+        width: 100%;
         margin-bottom: 1rem;
+
+        > span {
+            flex: 1;
+            font-size: 1.6rem;
+            font-weight: 700;
+        }
+        > svg {
+            fill: #000000;
+            width: 1.75rem;
+            height: 1.75rem;
+        }
     }
 
     p {
-        font-size: 1.3rem;
+        font-size: 1.125em;
         line-height: 1.5;
 
         strong {
@@ -143,6 +151,7 @@ main {
         }
 
         span {
+            font-size: 1rem;
             color: $color-text-sub;
         }
     }
@@ -284,6 +293,10 @@ main {
                 color: #fff;
             }
         }
+    }
+
+    .empty-state {
+        @include flex(column, center, center);
     }
 }
 

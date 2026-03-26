@@ -5,6 +5,8 @@
 }
 
 body {
+  position: relative;
+  height: 100%;
   background-color: #f5f6fa;
   color: #2d3436;
   font-family: "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Noto Sans KR", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;

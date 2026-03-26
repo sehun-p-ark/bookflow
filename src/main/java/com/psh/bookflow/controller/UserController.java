@@ -49,17 +49,6 @@ public class UserController {
         return ResponseEntity.noContent().build();
     }
 
-    // 이메일로 회원 조회 (query param)
-//    @GetMapping
-//    public ResponseEntity<UserResponse> getUserByEmail(
-//            @RequestParam String email,
-//            @RequestAttribute("LOGIN_USER_ID") Long userId
-//    ) {
-//        User user = userService.getByEmail(email);
-//        return ResponseEntity.ok(new UserResponse(user));
-//    }
-
-
     // ID로 회원 조회 (query param)
     @GetMapping("/me")
     public ResponseEntity<UserResponse> me(HttpSession session) {

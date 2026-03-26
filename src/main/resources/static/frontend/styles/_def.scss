@@ -1,5 +1,5 @@
 $color-primary: #6b63ff;
-$color-primary-hover: #7c75ff;
+$color-primary-hover: #d8d8d8;
 $color-primary-active: #5a52e6;
 
 $color-bg-main: #f5f6fa;
@@ -30,7 +30,7 @@ $radius-sm: 0.6rem;
 $radius-md: 1rem;
 $radius-lg: 1.2rem;
 
-$header-height: 6.5rem;
+$header-height: 4rem;
 $footer-height: 4rem;
 
 @mixin flex($flex-direction, $justify-content, $align-items, $gap: 0) {

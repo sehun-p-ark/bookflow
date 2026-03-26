@@ -1,7 +1,22 @@
 @charset "UTF-8";
-main {
-  width: 100%;
-  min-height: calc(100vh - 6.5rem);
+#main {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+}
+#main > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+#main > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+#main {
+  min-height: calc(100vh - 4rem - 4rem - 0.125rem);
+  margin: 4rem auto 0;
 }
 
 .auth-container {
@@ -20,19 +35,14 @@ main {
   flex-shrink: 1;
 }
 .auth-container {
-  padding: 3rem 2rem 0;
+  padding: 0 3rem;
   width: 100%;
-  margin: 6.5rem auto 2rem auto;
 }
 
 .card {
   background: #fff;
   border: 1px solid #dcdde1;
   border-radius: 1.2rem;
-}
-
-#profile-area .auth-card {
-  all: unset;
 }
 
 #login-area .auth-card {
@@ -86,7 +96,7 @@ main {
   cursor: pointer;
 }
 .btn-primary:hover {
-  background-color: #7c75ff;
+  background-color: #d8d8d8;
 }
 
 .btn-secondary {
@@ -148,12 +158,36 @@ main {
   color: #000000;
 }
 .account-side .side-title {
-  font-size: 1.6rem;
-  font-weight: 700;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  justify-content: stretch;
+}
+.account-side .side-title > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.account-side .side-title > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.account-side .side-title {
+  width: 100%;
   margin-bottom: 1rem;
 }
+.account-side .side-title > span {
+  flex: 1;
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+.account-side .side-title > svg {
+  fill: #000000;
+  width: 1.75rem;
+  height: 1.75rem;
+}
 .account-side p {
-  font-size: 1.3rem;
+  font-size: 1.125em;
   line-height: 1.5;
 }
 .account-side p strong {
@@ -161,6 +195,7 @@ main {
   color: #2d3436;
 }
 .account-side p span {
+  font-size: 1rem;
   color: #636e72;
 }
 .account-side #logout-btn {
@@ -311,6 +346,21 @@ main {
 .reservation-list .card .btn-review:hover {
   background: #1e90ff;
   color: #fff;
+}
+.reservation-list .empty-state {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  justify-content: center;
+}
+.reservation-list .empty-state > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.reservation-list .empty-state > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
 }
 
 /* 취소된 예약 */

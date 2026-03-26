@@ -1,15 +1,12 @@
 @use "../def" as *;
 
-.footer {
+#footer {
     height: $footer-height;
-
-    background-color: #f8f9fa;
-
+    background-color: #ececec;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-
     font-size: 0.9rem;
     color: $color-text-main;
     text-align: center;

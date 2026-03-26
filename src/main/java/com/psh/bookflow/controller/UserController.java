@@ -7,6 +7,7 @@ import com.psh.bookflow.exception.ErrorCode;
 import com.psh.bookflow.exception.UserException;
 import com.psh.bookflow.service.UserService;
 import jakarta.servlet.http.HttpSession;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,7 +21,7 @@ public class UserController {
 
     // 회원 가입
     @PostMapping("/")
-    public ResponseEntity<UserResponse> register(@RequestBody SignupRequest request) {
+    public ResponseEntity<UserResponse> register(@Valid @RequestBody SignupRequest request) {
         User user = userService.register(
                 request.getEmail(),
                 request.getPassword(),
@@ -33,7 +34,7 @@ public class UserController {
 
     // 로그인
     @PostMapping("/login")
-    public ResponseEntity<UserResponse> login(@RequestBody LoginRequest request, HttpSession session) {
+    public ResponseEntity<UserResponse> login(@Valid @RequestBody LoginRequest request, HttpSession session) {
         User user = userService.login(
                 request.getEmail(),
                 request.getPassword()
@@ -60,4 +61,3 @@ public class UserController {
         return ResponseEntity.ok(new UserResponse(user));
     }
 }
-

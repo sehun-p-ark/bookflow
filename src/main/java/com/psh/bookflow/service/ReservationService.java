@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
+import java.util.Date;
 import java.util.EnumSet;
 import java.util.List;
 
@@ -153,7 +154,11 @@ public class ReservationService {
 
     // 예약일자 검증 로직
     private static void validateDates(LocalDate checkIn, LocalDate checkOut) {
+        LocalDate today = LocalDate.now();
         if (checkIn == null || checkOut == null) {
+            throw new ReservationException(ErrorCode.RESERVATION_DATE_INVALID);
+        }
+        if (checkIn.isBefore(today)) {
             throw new ReservationException(ErrorCode.RESERVATION_DATE_INVALID);
         }
         if (!checkOut.isAfter(checkIn)) {

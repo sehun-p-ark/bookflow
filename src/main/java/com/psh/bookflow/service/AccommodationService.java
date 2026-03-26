@@ -4,6 +4,8 @@ import com.psh.bookflow.domain.Accommodation;
 import com.psh.bookflow.domain.Room;
 import com.psh.bookflow.domain.policy.ReservationPolicy;
 import com.psh.bookflow.dto.accommodation.AccommodationResponse;
+import com.psh.bookflow.exception.AccommodationException;
+import com.psh.bookflow.exception.ErrorCode;
 import com.psh.bookflow.repository.AccommodationRepository;
 import com.psh.bookflow.repository.RoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -20,7 +22,6 @@ public class AccommodationService {
 
     private final AccommodationRepository accommodationRepository;
     private final RoomRepository roomRepository;
-    private final UserService userService;
 
     // 숙소 등록
 //    @Transactional
@@ -66,7 +67,7 @@ public class AccommodationService {
     private Accommodation getAccommodation(Long id) {
         return accommodationRepository.findByIdWithImages(id)
                 .orElseThrow(() ->
-                        new IllegalArgumentException("숙소를 찾을 수 없습니다. id=" + id)
+                        new AccommodationException(ErrorCode.ACCOMMODATION_NOT_FOUND)
                 );
     }
 

@@ -2,10 +2,13 @@ package com.psh.bookflow.controller;
 
 import com.psh.bookflow.dto.accommodation.AccommodationResponse;
 import com.psh.bookflow.dto.room.RoomResponse;
+import com.psh.bookflow.exception.ErrorCode;
+import com.psh.bookflow.exception.ReservationException;
 import com.psh.bookflow.service.AccommodationService;
 import com.psh.bookflow.service.RoomService;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
@@ -14,6 +17,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/accommodations")
 @RequiredArgsConstructor
+@Validated
 public class AccommodationController {
 
     private final AccommodationService accommodationService;
@@ -30,8 +34,9 @@ public class AccommodationController {
     public List<AccommodationResponse> search(
             @RequestParam LocalDate checkIn,
             @RequestParam LocalDate checkOut,
-            @RequestParam int guest
+            @RequestParam @Min(1)int guest
     ) {
+        validateSearchDates(checkIn, checkOut);
         return accommodationService.searchAvailable(checkIn, checkOut, guest);
     }
 
@@ -47,8 +52,9 @@ public class AccommodationController {
             @PathVariable Long id,
             @RequestParam LocalDate checkIn,
             @RequestParam LocalDate checkOut,
-            @RequestParam int guest
+            @RequestParam @Min(1)int guest
     ) {
+        validateSearchDates(checkIn, checkOut);
         return roomService.findAvailableRooms(
                 id,
                 checkIn,
@@ -61,5 +67,11 @@ public class AccommodationController {
     @GetMapping("/{id}")
     public AccommodationResponse getById(@PathVariable Long id) {
         return accommodationService.findById(id);
+    }
+
+    private static void validateSearchDates(LocalDate checkIn, LocalDate checkOut) {
+        if (checkIn == null || checkOut == null || !checkOut.isAfter(checkIn)) {
+            throw new ReservationException(ErrorCode.RESERVATION_DATE_INVALID);
+        }
     }
 }

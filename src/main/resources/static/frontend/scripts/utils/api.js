@@ -2,15 +2,24 @@ const BASE_URL = "/api";
 
 /* fetch 요청 */
 async function request(path, options = {}) {
-    const res = await fetch(`${BASE_URL}${path}`, {
-        // 세션 기반 로그인 유지를 위해 include(요청 시 쿠키를 같이 보냄)
-        // 서버가 Set-Cookie로 쿠키 내려주면 브라우가 저장도 함
-        credentials: "include", ...options,
-        headers: {
-            "Content-Type": "application/json",
-            ...(options.headers || {})
-        }
-    });
+    let res;
+    try {
+        res = await fetch(`${BASE_URL}${path}`, {
+            // 세션 기반 로그인 유지를 위해 include(요청 시 쿠키를 같이 보냄)
+            // 서버가 Set-Cookie로 쿠키 내려주면 브라우가 저장도 함
+            credentials: "include", ...options,
+            headers: {
+                "Content-Type": "application/json",
+                ...(options.headers || {})
+            }
+        });
+    } catch {
+        throw {
+            status: 0,
+            code: "NETWORK_ERROR",
+            message: "네트워크 오류가 발생했습니다."
+        };
+    }
 
     // 204 No Content
     if (res.status === 204) {
@@ -19,13 +28,25 @@ async function request(path, options = {}) {
 
     // 실패 처리
     if (!res.ok) {
-        let error;
+        const fallback = {
+            status: res.status,
+            code: "HTTP_ERROR",
+            message: "요청 처리 중 오류가 발생했습니다.",
+            path
+        };
+
+        let data;
         try {
-            error = await res.json();
+            data = await res.json();
         } catch {
-            error = { message: "서버 오류" };
+            throw fallback;
         }
-        throw error;
+        throw {
+            status: data.status ?? fallback.status,
+            code: data.code ?? fallback.code,
+            message: data.message ?? fallback.message,
+            path: data.path ?? fallback.path
+        };
     }
 
     return res.json();

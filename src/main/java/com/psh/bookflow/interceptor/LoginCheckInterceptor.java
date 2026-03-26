@@ -15,11 +15,6 @@ public class LoginCheckInterceptor implements HandlerInterceptor {
             HttpServletResponse response,
             Object handler
     ) {
-        // 회원가입 로그인 인증 제외
-        if (request.getRequestURI().equals("/users")
-                && request.getMethod().equalsIgnoreCase("POST")) {
-            return true;
-        }
         // 세션 가져오기 (없으면 null)
         HttpSession session = request.getSession(false);
 

@@ -12,10 +12,11 @@ const STATE = {
 
 let state = STATE.BROWSE;
 let cached = [];
+let selectedFacilities = new Set();
 
 const $list = document.getElementById("accommodation-list");
 const $typeCheckboxes = document.querySelectorAll(".filter-item input");
-const $resetBtn = document.querySelector(".reload");
+const $resetBtn = document.querySelector(".filter-title .reload");
 const $facilityButtons = document.querySelectorAll(".filter-group .facilities");
 
 // 상태 별 화면 표시 HTML
@@ -48,6 +49,16 @@ function getSearchParams() {
 function hasSearchCondition({ checkIn, checkOut, guest }) {
     // !! : boolean으로 강제 변환
     return !!(checkIn && checkOut && guest);
+}
+
+function normalizeAmenity(value) {
+    return String(value || "").trim().toLowerCase();
+}
+
+function getSelectedTypes() {
+    return [...$typeCheckboxes]
+        .filter(c => c.checked)
+        .map(c => c.value);
 }
 
 async function loadAll() {
@@ -84,7 +95,25 @@ function renderAccommodations(list) {
         return;
     }
 
-    $list.innerHTML = list.map(accommodation =>`
+    $list.innerHTML = list.map(accommodation => {
+        const amenities = (accommodation.amenities || [])
+            .map(normalizeAmenity);
+
+        const amenitiesHtml = amenities.length > 0
+            ? `
+                <div class="amenities">
+                    ${amenities.map(amenity => `
+                        <span class="amenity-chip">${amenity}</span>
+                    `).join("")}
+                </div>
+            `
+            : `
+                <div class="amenities">
+                    <span class="amenity-chip empty">시설 정보 없음</span>
+                </div>
+            `;
+
+        return `
         <div class="accommodation-card">
             <div class="card-image">
                 <img src="/frontend/images/sample-hotel.jpg" alt="${accommodation.name}">
@@ -103,35 +132,65 @@ function renderAccommodations(list) {
                 <div class="price-area">
                     <span class="price">
                         ${accommodation.minPrice
-        ? `₩${accommodation.minPrice.toLocaleString()} / 1박`
-        : "가격 정보 없음"}
+            ? `₩${accommodation.minPrice.toLocaleString()} / 1박`
+            : "가격 정보 없음"}
                     </span>
                 </div>
+
+                ${amenitiesHtml}
 
                 <button class="room-btn" data-id="${accommodation.id}">
                     방보기
                 </button>
             </div>
         </div>
-    `).join("");
+    `;
+    }).join("");
 }
 
-// 필터 체크 타입에 맞춰 숙소 보여주기
-$typeCheckboxes.forEach(cb => {
-    cb.addEventListener("change", () => {
-        const types = [...$typeCheckboxes] // 배열로 바꾸는 스프레드 array.$typeCheckboxes랑 같음
-            .filter(c => c.checked)
-            .map(c => c.value);
+function applyFilters() {
+    const selectedTypes = getSelectedTypes();
+    const selectedAmenityKeys = [...selectedFacilities];
 
-        // 아무것도 체크되지 않았다면 전체 로드
-        if (types.length === 0) {
-            renderAccommodations(cached);
-            return;
+    const filtered = cached.filter(accommodation => {
+        const typeMatched =
+            selectedTypes.length === 0 ||
+            selectedTypes.includes(accommodation.category);
+
+        const hotelAmenities = (accommodation.amenities || [])
+            .map(normalizeAmenity);
+
+        const amenityMatched =
+            selectedAmenityKeys.length === 0 ||
+            selectedAmenityKeys.every(key => hotelAmenities.includes(key));
+
+        return typeMatched && amenityMatched;
+    });
+
+    renderAccommodations(filtered);
+}
+
+// 타입 필터
+$typeCheckboxes.forEach(cb => {
+    cb.addEventListener("change", applyFilters);
+});
+
+// 시설 필터
+$facilityButtons.forEach(btn => {
+    btn.addEventListener("click", () => {
+        const key = normalizeAmenity(btn.textContent);
+
+        if (selectedFacilities.has(key)) {
+            selectedFacilities.delete(key);
+            btn.classList.remove("active");
+            btn.setAttribute("aria-pressed", "false");
+        } else {
+            selectedFacilities.add(key);
+            btn.classList.add("active");
+            btn.setAttribute("aria-pressed", "true");
         }
 
-        renderAccommodations(
-            cached.filter(a => types.includes(a.category))
-        );
+        applyFilters();
     });
 });
 
@@ -146,11 +205,11 @@ function resetFilters() {
         btn.setAttribute("aria-pressed", "false");
     });
 
+    selectedFacilities.clear();
     renderAccommodations(cached);
 }
 
 $resetBtn?.addEventListener("click", resetFilters);
-
 
 // 방보기 버튼 눌렀을 때 room으로 이동
 $list.addEventListener("click", (e) => {

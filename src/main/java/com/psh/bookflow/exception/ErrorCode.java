@@ -23,6 +23,7 @@ public enum ErrorCode {
     RESERVATION_NOT_FOUND(HttpStatus.NOT_FOUND, "예약을 찾을 수 없습니다."),
     RESERVATION_INVALID_STATUS(HttpStatus.CONFLICT, "현재 예약 상태에서는 수행할 수 없는 요청입니다."),
     RESERVATION_COMPLETED_CANNOT_CANCEL(HttpStatus.CONFLICT, "완료된 예약은 취소할 수 없습니다."),
+    REVIEW_ALREADY_EXISTS(HttpStatus.CONFLICT, "이미 리뷰가 등록되어 있습니다."),
 
     // ===== Accommodation =====
     ACCOMMODATION_NOT_FOUND(HttpStatus.NOT_FOUND, "숙소를 찾을 수 없습니다."),

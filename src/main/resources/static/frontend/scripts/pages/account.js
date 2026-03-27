@@ -19,6 +19,13 @@ const userEmail = document.getElementById("user-email");
 const userName = document.getElementById("user-name");
 const logoutBtn = document.getElementById("logout-btn");
 
+const reviewModal = document.getElementById("review-modal");
+const reviewForm = document.getElementById("review-form");
+const reviewReservationIdInput = document.getElementById("review-reservation-id");
+const reviewRatingInput = document.getElementById("review-rating");
+const reviewContentInput = document.getElementById("review-content");
+const reviewCancelBtn = document.getElementById("review-cancel-btn");
+
 // reservation 영역
 const loginNotice = document.getElementById("login-notice");
 const reservationContent = document.getElementById("reservation-content");
@@ -188,21 +195,88 @@ tabs?.forEach(tab => {
 
 // 예약 취소
 reservationContent?.addEventListener("click", async (e) => {
-    if (!e.target.classList.contains("btn-cancel")) return;
+    const cancelBtn = e.target.closest(".btn-cancel");
+    if (cancelBtn) {
+        const reservationId = cancelBtn.dataset.id;
+        if (!confirm("예약을 취소하시겠습니까?")) return;
 
-    const reservationId = e.target.dataset.id;
-    if (!confirm("예약을 취소하시겠습니까?")) return;
+        try {
+            await apiPost(`/reservations/${reservationId}/cancel`);
+            alert("예약이 취소되었습니다.");
+            loadMyReservations();
+        } catch {
+            alert("예약 취소에 실패했습니다.");
+        }
+        return;
+    }
 
-    try {
-        await apiPost(`/reservations/${reservationId}/cancel`);
-        alert("예약이 취소되었습니다.");
-        loadMyReservations();
-    } catch {
-        alert("예약 취소에 실패했습니다.");
+    const reviewBtn = e.target.closest(".btn-review");
+    if (reviewBtn) {
+        openReviewModal(reviewBtn.dataset.id);
     }
 });
 
-    // TODO: "리뷰 작성" 버튼 클릭 동작(페이지 이동/모달/작성 API 연동) 정의 후 이벤트 핸들러 추가
+function openReviewModal(reservationId) {
+    if (!reviewModal) return;
+    reviewReservationIdInput.value = reservationId;
+    reviewRatingInput.value = "5";
+    reviewContentInput.value = "";
+    reviewModal.classList.remove("hidden");
+    reviewModal.setAttribute("aria-hidden", "false");
+}
+
+function closeReviewModal() {
+    if (!reviewModal) return;
+    reviewModal.classList.add("hidden");
+    reviewModal.setAttribute("aria-hidden", "true");
+}
+
+reviewForm?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+
+    const reservationId = Number(reviewReservationIdInput.value);
+    const rating = Number(reviewRatingInput.value);
+    const content = reviewContentInput.value.trim();
+
+    if (!reservationId) {
+        alert("잘못된 접근입니다.");
+        return;
+    }
+    if (!rating || rating < 1 || rating > 5) {
+        alert("별점은 1~5 사이로 입력해주세요.");
+        return;
+    }
+    if (!content) {
+        alert("리뷰 내용을 입력해주세요.");
+        return;
+    }
+
+    try {
+        await apiPost("/reviews", {
+            reservationId,
+            rating,
+            content
+        });
+        alert("리뷰가 등록되었습니다.");
+        closeReviewModal();
+        loadMyReservations();
+    } catch (e2) {
+        alert(e2.message || "리뷰 등록에 실패했습니다.");
+    }
+});
+
+reviewModal?.addEventListener("click", (e) => {
+    if (e.target.dataset.role === "close-review-modal") {
+        closeReviewModal();
+    }
+});
+
+reviewCancelBtn?.addEventListener("click", closeReviewModal);
+
+/* =========================
+   최초 실행
+========================= */
+checkLoginStatus();
 /* =========================
    최초 실행
 ========================= */

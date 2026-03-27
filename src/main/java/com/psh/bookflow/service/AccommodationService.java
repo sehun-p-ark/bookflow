@@ -1,7 +1,6 @@
 package com.psh.bookflow.service;
 
 import com.psh.bookflow.domain.Accommodation;
-import com.psh.bookflow.domain.Room;
 import com.psh.bookflow.domain.policy.ReservationPolicy;
 import com.psh.bookflow.dto.accommodation.AccommodationResponse;
 import com.psh.bookflow.exception.AccommodationException;
@@ -46,11 +45,8 @@ public class AccommodationService {
     // 숙소 전체 조회
     @Transactional(readOnly = true)
     public List<AccommodationResponse> findAll() {
-        return accommodationRepository.findAllWithImages().stream()
-                .map(accommodation -> {
-                    Integer minPrice = this.roomRepository.findMinPriceByAccommodationId(accommodation.getId());
-                    return new AccommodationResponse(accommodation, minPrice);
-                })
+        return accommodationRepository.findAllWithImagesAndAmenities().stream()
+                .map(this::toResponse)
                 .toList();
     }
 
@@ -58,14 +54,12 @@ public class AccommodationService {
     @Transactional(readOnly = true)
     public AccommodationResponse findById(Long id) {
         Accommodation accommodation = getAccommodation(id);
-        Integer minPrice = this.roomRepository.findMinPriceByAccommodationId(accommodation.getId());
-        // 새로운 AccommodationResponse 객체 생성 후 return
-        return new AccommodationResponse(accommodation, minPrice);
+        return toResponse(accommodation);
     }
 
     // "private" 숙소 개별 조회
     private Accommodation getAccommodation(Long id) {
-        return accommodationRepository.findByIdWithImages(id)
+        return accommodationRepository.findByIdWithImagesAndAmenities(id)
                 .orElseThrow(() ->
                         new AccommodationException(ErrorCode.ACCOMMODATION_NOT_FOUND)
                 );
@@ -79,7 +73,15 @@ public class AccommodationService {
                         checkIn,
                         checkOut,
                         guest
-                );
+                ).stream()
+                .map(this::toResponse)
+                .toList();
         return  accommodations;
+    }
+
+    // accommodation -> accommodationResponse
+    private AccommodationResponse toResponse(Accommodation accommodation) {
+        Integer minPrice = this.roomRepository.findMinPriceByAccommodationId(accommodation.getId());
+        return new AccommodationResponse(accommodation, minPrice);
     }
 }

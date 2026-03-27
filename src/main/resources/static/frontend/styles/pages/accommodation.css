@@ -95,6 +95,11 @@
 .filter-area .filter-group .facilities:hover {
   background-color: #d8d8d8;
 }
+.filter-area .filter-group .facilities.active {
+  background-color: #6b63ff;
+  border-color: #6b63ff;
+  color: #fff;
+}
 .filter-area .filter-item {
   display: flex;
   align-items: center;
@@ -175,7 +180,7 @@
   flex: 1;
 }
 .accommodation-card .card-body h3 {
-  font-size: 1.8rem;
+  font-size: 1.5rem;
   font-weight: 700;
   margin-bottom: 0.4rem;
   white-space: nowrap;
@@ -183,7 +188,7 @@
   text-overflow: ellipsis;
 }
 .accommodation-card .card-body .rating {
-  font-size: 1.4rem;
+  font-size: 1rem;
   color: #ffb400;
   margin-bottom: 0.6rem;
 }
@@ -192,14 +197,45 @@
   color: #636e72;
 }
 .accommodation-card .card-body .address {
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   color: #636e72;
   margin-bottom: 1rem;
 }
 .accommodation-card .card-body .price-area {
-  font-size: 1.4rem;
+  font-size: 1.25rem;
   font-weight: 500;
   margin-bottom: 1rem;
+}
+.accommodation-card .card-body .amenities {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0.4rem;
+  justify-content: flex-start;
+}
+.accommodation-card .card-body .amenities > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.accommodation-card .card-body .amenities > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.accommodation-card .card-body .amenities {
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+.accommodation-card .card-body .amenities .amenity-chip {
+  display: inline-block;
+  padding: 0.3rem 0.6rem;
+  border: 0.0625rem solid #dcdde1;
+  border-radius: 999rem;
+  font-size: 1rem;
+  color: #636e72;
+  background-color: #fff;
+}
+.accommodation-card .card-body .amenities .amenity-chip.empty {
+  opacity: 0.8;
 }
 .accommodation-card .card-body .room-btn {
   align-self: flex-end;
@@ -211,9 +247,10 @@
   color: #fff;
   font-size: 1.4rem;
   text-decoration: none;
+  cursor: pointer;
 }
 .accommodation-card .card-body .room-btn:hover {
-  background-color: #d8d8d8;
+  background-color: rgba(127, 122, 218, 0.88);
 }
 
 #accommodation-list > .empty,

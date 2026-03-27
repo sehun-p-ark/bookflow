@@ -125,6 +125,7 @@
 /****************************** 로그인 이후 ****************************/
 #profile-area {
   width: 100%;
+  margin: 2rem 0;
 }
 
 .account-layout {
@@ -366,6 +367,110 @@
 /* 취소된 예약 */
 .reservation-section[data-section=CANCELED] .card {
   opacity: 0.6;
+}
+
+/****************************** 리뷰 모달 ****************************/
+.review-modal {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+}
+.review-modal.hidden {
+  display: none;
+}
+.review-modal__backdrop {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+}
+.review-modal__panel {
+  position: relative;
+  width: min(32rem, 100vw - 2rem);
+  margin: 12vh auto 0;
+  border-radius: 1rem;
+  border: 1px solid #dcdde1;
+  background: #fff;
+  padding: 1.2rem;
+  box-shadow: 0 0.625rem 1.875rem rgba(0, 0, 0, 0.18);
+}
+.review-modal__panel > h3 {
+  margin-bottom: 1rem;
+  font-size: 1.4rem;
+  font-weight: 700;
+}
+.review-modal__actions {
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0.6rem;
+  justify-content: flex-end;
+}
+.review-modal__actions > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.review-modal__actions > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.review-modal__actions {
+  margin-top: 1rem;
+}
+.review-modal__actions > .btn-primary {
+  margin-top: 0;
+  height: 2.8rem;
+  padding: 0 1.2rem;
+}
+.review-modal__actions > .btn-secondary {
+  margin-top: 0;
+  height: 2.8rem;
+  padding: 0 1.2rem;
+  align-items: center;
+  display: flex;
+  flex-direction: row;
+  gap: 0;
+  justify-content: center;
+}
+.review-modal__actions > .btn-secondary > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.review-modal__actions > .btn-secondary > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+
+.review-form {
+  align-items: stretch;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  justify-content: flex-start;
+}
+.review-form > * {
+  flex-grow: 0;
+  flex-shrink: 0;
+}
+.review-form > .-flex-stretch {
+  flex-grow: 1;
+  flex-shrink: 1;
+}
+.review-form label {
+  font-size: 1rem;
+  font-weight: 600;
+  color: #2d3436;
+}
+.review-form select,
+.review-form textarea {
+  border: 1px solid #dcdde1;
+  border-radius: 0.6rem;
+  padding: 0.6rem;
+  font-size: 1rem;
+  outline: none;
+}
+.review-form select:focus,
+.review-form textarea:focus {
+  border-color: #6b63ff;
 }
 
 /*# sourceMappingURL=account.css.map */

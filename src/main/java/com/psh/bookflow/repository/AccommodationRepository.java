@@ -2,7 +2,6 @@ package com.psh.bookflow.repository;
 
 import com.psh.bookflow.domain.Accommodation;
 import com.psh.bookflow.domain.Statuses.ReservationStatus;
-import com.psh.bookflow.dto.accommodation.AccommodationResponse;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -24,37 +23,38 @@ public interface AccommodationRepository
         from Accommodation a
         left join fetch a.images
     """)
-    List<Accommodation> findAllWithImages();
+    List<Accommodation> findAllWithImagesAndAmenities();
 
     // 숙소 단건 조회 + 이미지 함께 로딩
     @Query("""
-        select a
+        select distinct a
         from Accommodation a
         left join fetch a.images
         where a.id = :id
     """)
-    Optional<Accommodation> findByIdWithImages(Long id);
+    Optional<Accommodation> findByIdWithImagesAndAmenities(Long id);
 
     // 조건(날짜, 인원)에 따른 예약 가능한 방이 있는 숙소 조회
     @Query("""
-                select new com.psh.bookflow.dto.accommodation.AccommodationResponse(
-                    a,
-                    min(r.price)
-                )
+                select distinct a
                 from Accommodation a
-                join a.rooms r
-                where r.capacity >= :guest
-                  and not exists (
-                      select 1
-                      from Reservation res
-                      where res.room = r
-                        and res.status in :statuses
-                        and res.checkInDate < :checkOut
-                        and res.checkOutDate > :checkIn
-                  )
-                     group by a
+                left join fetch a.images
+                where exists (
+                    select r.id
+                    from Room r
+                    where r.accommodation = a
+                      and r.capacity >= :guest
+                      and not exists (
+                          select 1
+                          from Reservation res
+                          where res.room = r
+                            and res.status in :statuses
+                            and res.checkInDate < :checkOut
+                            and res.checkOutDate > :checkIn
+                      )
+                )
             """)
-    List<AccommodationResponse> findAvailableAccommodations(
+    List<Accommodation> findAvailableAccommodations(
             @Param("statuses") EnumSet<ReservationStatus> statuses,
             @Param("checkIn") LocalDate checkIn,
             @Param("checkOut") LocalDate checkOut,

@@ -1,6 +1,7 @@
 package com.psh.bookflow.dto.accommodation;
 
 import com.psh.bookflow.domain.Accommodation;
+import com.psh.bookflow.domain.AccommodationAmenity;
 import com.psh.bookflow.domain.AccommodationImage;
 import com.psh.bookflow.domain.Statuses.AccommodationStatus;
 import lombok.Getter;
@@ -23,6 +24,7 @@ public class AccommodationResponse {
     private final LocalDateTime updatedAt;
     private final List<String> imageUrls;
     private final Integer minPrice;
+    private final List<String> amenities;
 
     public AccommodationResponse(Accommodation accommodation, Integer minPrice) {
         this.id = accommodation.getId();
@@ -39,5 +41,8 @@ public class AccommodationResponse {
                 .sorted(Comparator.comparingInt(AccommodationImage::getSortOrder)) //.sorted(a-b)와 동일
                 .map(AccommodationImage::getImageUrl) // getImage
                 .toList();
+        this.amenities = accommodation.getAmenities().stream()
+                .map(AccommodationAmenity::getAmenity)
+                .toList();;
     }
 }

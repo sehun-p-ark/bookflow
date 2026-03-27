@@ -21,6 +21,10 @@ public class WebMvcConfig implements WebMvcConfigurer {
                 // 로그인 인증 필요함
                 .addPathPatterns(
                         "/api/users/me",
+                        "/api/rooms",
+                        "/api/reservations",
+                        "/api/reviews",
+                        "/api/reviews/**",
                         "/api/reservations/**"
                 );
     }

@@ -117,6 +117,35 @@
     </div>
 </main>
 
+<!-- 리뷰 작성 모달 -->
+<div id="review-modal" class="review-modal hidden" aria-hidden="true">
+    <div class="review-modal__backdrop" data-role="close-review-modal"></div>
+    <section class="review-modal__panel" role="dialog" aria-modal="true" aria-labelledby="review-modal-title">
+        <h3 id="review-modal-title">리뷰 작성</h3>
+        <form id="review-form" class="review-form">
+            <input type="hidden" id="review-reservation-id">
+
+            <label for="review-rating">별점 (1~5)</label>
+            <select id="review-rating" required>
+                <option value="5">5점</option>
+                <option value="4">4점</option>
+                <option value="3">3점</option>
+                <option value="2">2점</option>
+                <option value="1">1점</option>
+            </select>
+
+            <label for="review-content">내용</label>
+            <textarea id="review-content" rows="5" maxlength="1000" placeholder="숙소 이용 경험을 작성해주세요." required></textarea>
+
+            <div class="review-modal__actions">
+                <button type="button" id="review-cancel-btn" class="btn-secondary">닫기</button>
+                <button type="submit" class="btn-primary">등록</button>
+            </div>
+        </form>
+    </section>
+</div>
+
+
 <div id="footer"></div>
 
 </body>

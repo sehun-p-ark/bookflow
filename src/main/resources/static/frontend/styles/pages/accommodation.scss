@@ -71,6 +71,12 @@
             &:hover {
                 background-color: $color-primary-hover;
             }
+
+            &.active {
+                background-color: $color-primary;
+                border-color: $color-primary;
+                color: #fff;
+            }
         }
     }
 
@@ -133,7 +139,7 @@
         flex: 1;
 
         h3 {
-            font-size: 1.8rem;
+            font-size: 1.5rem;
             font-weight: 700;
             margin-bottom: 0.4rem;
             white-space: nowrap;
@@ -142,7 +148,7 @@
         }
 
         .rating {
-            font-size: 1.4rem;
+            font-size: 1rem;
             color: #ffb400;
             margin-bottom: 0.6rem;
 
@@ -153,16 +159,37 @@
         }
 
         .address {
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             color: $color-text-sub;
             margin-bottom: 1rem;
         }
 
         .price-area {
-            font-size: 1.4rem;
+            font-size: 1.25rem;
             font-weight: 500;
             margin-bottom: 1rem;
         }
+
+        .amenities {
+            @include flex(row, flex-start, center, 0.4rem);
+            flex-wrap: wrap;
+            margin-bottom: 1rem;
+
+            .amenity-chip {
+                display: inline-block;
+                padding: 0.3rem 0.6rem;
+                border: 0.0625rem solid $color-border;
+                border-radius: 999rem;
+                font-size: 1rem;
+                color: $color-text-sub;
+                background-color: #fff;
+
+                &.empty {
+                    opacity: 0.8;
+                }
+            }
+        }
+
 
         .room-btn {
             align-self: flex-end;
@@ -174,9 +201,10 @@
             color: #fff;
             font-size: 1.4rem;
             text-decoration: none;
+            cursor: pointer;
 
             &:hover {
-                background-color: $color-primary-hover;
+                background-color: $color-primary-active;
             }
         }
     }

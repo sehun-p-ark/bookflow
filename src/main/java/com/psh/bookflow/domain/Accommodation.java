@@ -52,6 +52,11 @@ public class Accommodation {
         this.updatedAt = LocalDateTime.now();
     }
 
+    @PreUpdate
+    protected void onUpdate() {
+        this.updatedAt = LocalDateTime.now();
+    }
+
     @OneToMany(
             mappedBy = "accommodation",
             cascade = CascadeType.ALL,
@@ -66,10 +71,12 @@ public class Accommodation {
     )
     private List<Room> rooms = new ArrayList<>();
 
-    @PreUpdate
-    protected void onUpdate() {
-        this.updatedAt = LocalDateTime.now();
-    }
+    @OneToMany(
+            mappedBy = "accommodation",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private List<AccommodationAmenity> amenities = new ArrayList<>();
 
     public void deactivate() {
         this.status = AccommodationStatus.INACTIVE;

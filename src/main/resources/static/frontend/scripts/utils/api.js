@@ -41,6 +41,7 @@ async function request(path, options = {}) {
         } catch {
             throw fallback;
         }
+
         throw {
             status: data.status ?? fallback.status,
             code: data.code ?? fallback.code,

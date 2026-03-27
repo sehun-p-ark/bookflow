@@ -73,7 +73,7 @@
     font-size: 1.1rem;
     cursor: pointer;
     text-align: center;
-    line-height: 3rem;
+    line-height: 1.5rem;
 }
 
 .auth-links {
@@ -348,6 +348,12 @@ a.detail-btn {
     border-color: #ff3948;
     color: #ff3948;
     background: #fff;
+}
+
+.btn-review {
+    background-color: #fff;
+    border-color: #3b82f6;
+    color: #3b82f6;
 }
 
 .empty-state {

@@ -21,10 +21,7 @@
         <!-- 🔹 비로그인 영역 -->
         <section id="login-area">
             <div class="card auth-card">
-                <h2 class="auth-title">
-                    이메일로<br>
-                    로그인해 주세요
-                </h2>
+                <h2 class="auth-title">이메일로<br>로그인해 주세요</h2>
 
                 <form id="login-form" class="auth-form">
                     <label>
@@ -53,62 +50,119 @@
 
         <!-- 🔹 로그인 후 영역 -->
         <section id="profile-area" hidden>
-            <div class="account-layout card">
+            <div class="account-layout">
+                <aside class="account-side card">
+                    <h3 class="side-heading">내 정보</h3>
 
-                <!-- 사용자 정보 -->
-                <aside class="account-side">
-                    <h3 class="side-title">
-                        <span>내 정보</span>
-                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 -960 960 960">
-                            <path d="m370-80-16-128q-13-5-24.5-12T307-235l-119 50L78-375l103-78q-1-7-1-13.5v-27q0-6.5 1-13.5L78-585l110-190 119 50q11-8 23-15t24-12l16-128h220l16 128q13 5 24.5 12t22.5 15l119-50 110 190-103 78q1 7 1 13.5v27q0 6.5-2 13.5l103 78-110 190-118-50q-11 8-23 15t-24 12L590-80H370Zm70-80h79l14-106q31-8 57.5-23.5T639-327l99 41 39-68-86-65q5-14 7-29.5t2-31.5q0-16-2-31.5t-7-29.5l86-65-39-68-99 42q-22-23-48.5-38.5T533-694l-13-106h-79l-14 106q-31 8-57.5 23.5T321-633l-99-41-39 68 86 64q-5 15-7 30t-2 32q0 16 2 31t7 30l-86 65 39 68 99-42q22 23 48.5 38.5T427-266l13 106Zm42-180q58 0 99-41t41-99q0-58-41-99t-99-41q-59 0-99.5 41T342-480q0 58 40.5 99t99.5 41Zm-2-140Z"/>
-                        </svg>
-                    </h3>
-                    <p><strong>이메일</strong><br>
-                        <span id="user-email"></span>
-                    </p>
-                    <p><strong>이름</strong><br>
-                        <span id="user-name"></span>
-                    </p>
-                    <div class="-flex-stretch"></div>
-                    <button id="logout-btn" class="btn-primary">
-                        로그아웃
-                    </button>
-                    <button id="delete-btn" class="btn-delete">
-                        회원탈퇴
-                    </button>
+                    <dl class="user-meta">
+                        <div>
+                            <dt>이메일</dt>
+                            <dd id="user-email"></dd>
+                        </div>
+                        <div>
+                            <dt>이름</dt>
+                            <dd id="user-name"></dd>
+                        </div>
+                    </dl>
+
+                    <nav class="account-nav" id="account-nav">
+                        <button type="button" class="nav-btn active" data-panel="profile">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3a4659"><path d="M367-527q-47-47-47-113t47-113q47-47 113-47t113 47q47 47 47 113t-47 113q-47 47-113 47t-113-47ZM160-160v-112q0-34 17.5-62.5T224-378q62-31 126-46.5T480-440q66 0 130 15.5T736-378q29 15 46.5 43.5T800-272v112H160Zm80-80h480v-32q0-11-5.5-20T700-306q-54-27-109-40.5T480-360q-56 0-111 13.5T260-306q-9 5-14.5 14t-5.5 20v32Zm296.5-343.5Q560-607 560-640t-23.5-56.5Q513-720 480-720t-56.5 23.5Q400-673 400-640t23.5 56.5Q447-560 480-560t56.5-23.5ZM480-640Zm0 400Z"/></svg>
+                            <span>내 정보 수정</span>
+                        </button>
+                        <button type="button" class="nav-btn" data-panel="accommodation">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3a4659"><path d="M120-120v-560h160v-160h400v320h160v400H520v-160h-80v160H120Zm80-80h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 320h80v-80h-80v80Zm0-160h80v-80h-80v80Zm0-160h80v-80h-80v80Zm160 480h80v-80h-80v80Zm0-160h80v-80h-80v80Z"/></svg>
+                            <span>내 숙소 관리</span>
+                        </button>
+                        <button type="button" class="nav-btn" data-panel="upcoming">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3a4659"><path d="M200-80q-33 0-56.5-23.5T120-160v-560q0-33 23.5-56.5T200-800h40v-80h80v80h320v-80h80v80h40q33 0 56.5 23.5T840-720v560q0 33-23.5 56.5T760-80H200Zm0-80h560v-400H200v400Zm0-480h560v-80H200v80Zm0 0v-80 80Z"/></svg>
+                            <span>이용 전</span>
+                        </button>
+                        <button type="button" class="nav-btn" data-panel="completed">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3a4659"><path d="m424-296 282-282-56-56-226 226-114-114-56 56 170 170Zm56 216q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
+                            <span>이용 후</span>
+                        </button>
+                        <button type="button" class="nav-btn" data-panel="canceled">
+                            <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3a4659"><path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
+                            <span>취소 됨</span>
+                        </button>
+                    </nav>
+
+                    <div class="side-divider"></div>
+
+                    <button id="logout-btn" class="btn-primary side-action">로그아웃</button>
+                    <button id="delete-btn" class="btn-delete side-action">회원탈퇴</button>
                 </aside>
 
-                <!-- 예약 정보  -->
-                <section class="account-main">
-                    <section id="reservation-content" class="card">
+                <section class="account-main card">
+                    <section class="account-panel active" data-panel="profile">
+                        <h2 class="panel-title">내 정보 수정</h2>
 
-                        <nav class="reservation-tabs">
-                            <label class="tab-label">
-                                <input checked type="radio" name="reservation-tab" data-status="UPCOMING" class="tab">
-                                <span>이용 전</span>
+                        <form id="profile-form" class="account-form" novalidate>
+                            <h3 class="section-title">기본 정보</h3>
+                            <label>
+                                이름
+                                <input type="text" id="profile-name" placeholder="이름 입력">
                             </label>
-                            <label class="tab-label">
-                                <input type="radio" name="reservation-tab" data-status="COMPLETED" class="tab">
-                                <span>이용 후</span>
+
+                            <hr>
+
+                            <h3 class="section-title">비밀번호 변경</h3>
+
+                            <label class="password-field">
+                                현재 비밀번호
+                                <span class="input-wrap">
+                                    <input type="password" id="current-password" placeholder="현재 비밀번호">
+                                    <button type="button" class="toggle-password" data-target="current-password">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z"/></svg>
+                                    </button>
+                                </span>
                             </label>
-                            <label class="tab-label">
-                                <input type="radio" name="reservation-tab" data-status="CANCELED" class="tab">
-                                <span>취소 됨</span>
+
+                            <label class="password-field">
+                                새 비밀번호
+                                <span class="input-wrap">
+                                    <input type="password" id="new-password" placeholder="새 비밀번호">
+                                    <button type="button" class="toggle-password" data-target="new-password">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z"/></svg>
+                                    </button>
+                                </span>
                             </label>
-                        </nav>
 
-                        <section class="reservation-section" data-section="UPCOMING">
-                            <div class="reservation-list"></div>
-                        </section>
+                            <label class="password-field">
+                                새 비밀번호 확인
+                                <span class="input-wrap">
+                                    <input type="password" id="new-password-confirm" placeholder="새 비밀번호 확인">
+                                    <button type="button" class="toggle-password" data-target="new-password-confirm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px"><path d="m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z"/></svg>
+                                    </button>
+                                </span>
+                            </label>
+                            <button type="submit" class="btn-primary save-btn">변경사항 저장</button>
+                        </form>
+                    </section>
 
-                        <section class="reservation-section hidden" data-section="COMPLETED">
-                            <div class="reservation-list"></div>
-                        </section>
+                    <section class="account-panel" data-panel="accommodation">
+                        <div class="panel-head-inline">
+                            <h2 class="panel-title">내 숙소 관리</h2>
+                            <button type="button" class="btn-primary add-btn">+ 숙소 등록</button>
+                        </div>
+                        <div class="reservation-list" id="my-accommodation-list"></div>
+                    </section>
 
-                        <section class="reservation-section hidden" data-section="CANCELED">
-                            <div class="reservation-list"></div>
-                        </section>
+                    <section class="account-panel" data-panel="upcoming">
+                        <h2 class="panel-title">이용 전</h2>
+                        <div class="reservation-list" data-section="UPCOMING"></div>
+                    </section>
 
+                    <section class="account-panel" data-panel="completed">
+                        <h2 class="panel-title">이용 후</h2>
+                        <div class="reservation-list" data-section="COMPLETED"></div>
+                    </section>
+
+                    <section class="account-panel" data-panel="canceled">
+                        <h2 class="panel-title">취소 됨</h2>
+                        <div class="reservation-list" data-section="CANCELED"></div>
                     </section>
                 </section>
             </div>
@@ -117,7 +171,6 @@
     </div>
 </main>
 
-<!-- 리뷰 작성 모달 -->
 <div id="review-modal" class="review-modal hidden" aria-hidden="true">
     <div class="review-modal__backdrop" data-role="close-review-modal"></div>
     <section class="review-modal__panel" role="dialog" aria-modal="true" aria-labelledby="review-modal-title">
@@ -144,7 +197,6 @@
         </form>
     </section>
 </div>
-
 
 <div id="footer"></div>
 

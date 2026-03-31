@@ -95,5 +95,20 @@ public class Accommodation {
         this.owner = owner;
     }
 
+    public void updateInfo(String name, String description, String address, String phone, String category) {
+        this.name = name;
+        this.description = description;
+        this.address = address;
+        this.phone = phone;
+        this.category = category;
+    }
+
+    public void replaceImages(List<String> imageUrls) {
+        this.images.clear();
+        for (int i = 0; i < imageUrls.size(); i++) {
+            this.images.add(new AccommodationImage(imageUrls.get(i), i, this));
+        }
+    }
+
 }
 

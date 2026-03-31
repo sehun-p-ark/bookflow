@@ -42,7 +42,18 @@ public class RoomService {
                                 new RoomException(ErrorCode.ACCOMMODATION_NOT_FOUND)
                         );
 
-        Room room = new Room(request.getName(), request.getDescription(), request.getPrice(), request.getCapacity(), accommodation);
+        if (request.getImageUrl() == null || request.getImageUrl().isBlank()) {
+            throw new RoomException(ErrorCode.ROOM_IMAGE_REQUIRED);
+        }
+
+        Room room = new Room(
+                request.getName(),
+                request.getDescription(),
+                request.getPrice(),
+                request.getCapacity(),
+                request.getImageUrl(),
+                accommodation
+        );
 
         Room saved = roomRepository.save(room);
         return new RoomResponse(saved);

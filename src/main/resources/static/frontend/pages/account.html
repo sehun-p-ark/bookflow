@@ -86,6 +86,12 @@
                             <svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="#3a4659"><path d="m336-280 144-144 144 144 56-56-144-144 144-144-56-56-144 144-144-144-56 56 144 144-144 144 56 56ZM480-80q-83 0-156-31.5T197-197q-54-54-85.5-127T80-480q0-83 31.5-156T197-763q54-54 127-85.5T480-880q83 0 156 31.5T763-763q54 54 85.5 127T880-480q0 83-31.5 156T763-197q-54 54-127 85.5T480-80Zm0-80q134 0 227-93t93-227q0-134-93-227t-227-93q-134 0-227 93t-93 227q0 134 93 227t227 93Zm0-320Z"/></svg>
                             <span>취소 됨</span>
                         </button>
+                        <button type="button" class="nav-btn" data-panel="host-requested">
+                            <span>예약 요청</span>
+                        </button>
+                        <button type="button" class="nav-btn" data-panel="host-confirmed">
+                            <span>예약 확정</span>
+                        </button>
                     </nav>
 
                     <div class="side-divider"></div>
@@ -164,12 +170,80 @@
                         <h2 class="panel-title">취소 됨</h2>
                         <div class="reservation-list" data-section="CANCELED"></div>
                     </section>
+
+                    <section class="account-panel" data-panel="host-requested">
+                        <h2 class="panel-title">예약 요청</h2>
+                        <div class="reservation-list" data-host-section="REQUESTED"></div>
+                    </section>
+
+                    <section class="account-panel" data-panel="host-confirmed">
+                        <h2 class="panel-title">예약 확정</h2>
+                        <div class="reservation-list" data-host-section="CONFIRMED"></div>
+                    </section>
                 </section>
             </div>
         </section>
 
     </div>
 </main>
+
+<div id="accommodation-modal" class="review-modal hidden" aria-hidden="true">
+    <div class="review-modal__backdrop" data-role="close-accommodation-modal"></div>
+    <section class="review-modal__panel accommodation-modal-panel" role="dialog" aria-modal="true" aria-labelledby="accommodation-modal-title">
+        <h3 id="accommodation-modal-title">숙소/방 등록</h3>
+        <form id="accommodation-form" class="review-form">
+            <h4 class="form-section-title">숙소 정보</h4>
+
+            <label for="accommodation-name">숙소명</label>
+            <input id="accommodation-name" type="text" required>
+
+            <label for="accommodation-address">숙소 지역</label>
+            <input id="accommodation-address" type="text" placeholder="예: 서울 강남구" required>
+
+            <label for="accommodation-phone">숙소 전화번호</label>
+            <input id="accommodation-phone" type="text" required>
+
+            <label for="accommodation-category">카테고리</label>
+            <select id="accommodation-category" required>
+                <option value="hotel">hotel</option>
+                <option value="motel">motel</option>
+                <option value="pension">pension</option>
+                <option value="resort">resort</option>
+                <option value="etc">etc</option>
+            </select>
+
+            <label for="accommodation-description">숙소 한 줄 설명</label>
+            <input id="accommodation-description" type="text" maxlength="120" placeholder="예: 강남역 도보 5분, 비즈니스 추천" required>
+
+            <label for="accommodation-image-file">숙소 이미지 파일 (최소 1장)</label>
+            <input id="accommodation-image-file" type="file" accept="image/*">
+
+            <hr class="form-divider">
+
+            <h4 class="form-section-title">방 정보</h4>
+            <p id="room-form-help" class="form-help">숙소 등록 시 대표 객실 1개를 함께 등록합니다.</p>
+
+            <label for="room-name">방 이름</label>
+            <input id="room-name" type="text" required>
+
+            <label for="room-description">방 설명</label>
+            <input id="room-description" type="text" maxlength="150" placeholder="출장용 / 1인 추천 / 기본 객실" required>
+
+            <label for="room-capacity">수용인원</label>
+            <input id="room-capacity" type="number" min="1" step="1" required>
+
+            <label for="room-price">1박 비용</label>
+            <input id="room-price" type="number" min="1000" step="1000" required>
+
+            <label for="room-image-file">방 이미지 파일 (최소 1장)</label>
+            <input id="room-image-file" type="file" accept="image/*">
+            <div class="review-modal__actions">
+                <button type="button" id="accommodation-cancel-btn" class="btn-secondary">닫기</button>
+                <button type="submit" class="btn-primary">저장</button>
+            </div>
+        </form>
+    </section>
+</div>
 
 <div id="review-modal" class="review-modal hidden" aria-hidden="true">
     <div class="review-modal__backdrop" data-role="close-review-modal"></div>

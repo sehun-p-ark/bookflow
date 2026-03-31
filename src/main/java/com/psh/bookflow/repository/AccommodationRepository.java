@@ -34,6 +34,14 @@ public interface AccommodationRepository
     """)
     Optional<Accommodation> findByIdWithImagesAndAmenities(Long id);
 
+    @Query("""
+        select distinct a
+        from Accommodation a
+        left join fetch a.images
+        where a.owner.id = :ownerId
+    """)
+    List<Accommodation> findByOwnerIdWithImagesAndAmenities(@Param("ownerId") Long ownerId);
+
     // 조건(날짜, 인원)에 따른 예약 가능한 방이 있는 숙소 조회
     @Query("""
                 select distinct a

@@ -2,9 +2,11 @@ package com.psh.bookflow.domain;
 
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
+@NoArgsConstructor
 public class AccommodationImage {
 
     @Id
@@ -19,4 +21,10 @@ public class AccommodationImage {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "accommodation_id", nullable = false)
     private Accommodation accommodation;
+
+    public AccommodationImage(String imageUrl, int sortOrder, Accommodation accommodation) {
+        this.imageUrl = imageUrl;
+        this.sortOrder = sortOrder;
+        this.accommodation = accommodation;
+    }
 }

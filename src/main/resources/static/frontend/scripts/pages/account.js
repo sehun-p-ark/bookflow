@@ -1,6 +1,6 @@
-import {loadHeader} from "/frontend/scripts/components/header.js";
-import {loadFooter} from "/frontend/scripts/components/footer.js";
-import {apiGet, apiPost} from "/frontend/scripts/utils/api.js";
+import { loadHeader } from "/frontend/scripts/components/header.js";
+import { loadFooter } from "/frontend/scripts/components/footer.js";
+import { apiDelete, apiGet, apiPatch, apiPost, apiUpload } from "/frontend/scripts/utils/api.js";
 
 loadHeader();
 loadFooter();
@@ -23,6 +23,29 @@ const panels = document.querySelectorAll(".account-panel");
 
 const profileForm = document.getElementById("profile-form");
 const profileNameInput = document.getElementById("profile-name");
+const currentPasswordInput = document.getElementById("current-password");
+const newPasswordInput = document.getElementById("new-password");
+const newPasswordConfirmInput = document.getElementById("new-password-confirm");
+
+const addAccommodationBtn = document.querySelector(".add-btn");
+const accommodationModal = document.getElementById("accommodation-modal");
+const accommodationForm = document.getElementById("accommodation-form");
+const accommodationModalTitle = document.getElementById("accommodation-modal-title");
+const accommodationCancelBtn = document.getElementById("accommodation-cancel-btn");
+const roomFormHelp = document.getElementById("room-form-help");
+
+const accommodationNameInput = document.getElementById("accommodation-name");
+const accommodationAddressInput = document.getElementById("accommodation-address");
+const accommodationCategoryInput = document.getElementById("accommodation-category");
+const accommodationPhoneInput = document.getElementById("accommodation-phone");
+const accommodationDescriptionInput = document.getElementById("accommodation-description");
+const accommodationImageFileInput = document.getElementById("accommodation-image-file");
+
+const roomNameInput = document.getElementById("room-name");
+const roomDescriptionInput = document.getElementById("room-description");
+const roomCapacityInput = document.getElementById("room-capacity");
+const roomPriceInput = document.getElementById("room-price");
+const roomImageFileInput = document.getElementById("room-image-file");
 
 const reviewModal = document.getElementById("review-modal");
 const reviewForm = document.getElementById("review-form");
@@ -45,24 +68,8 @@ const STATUS_GROUP = {
 
 const CANCELABLE_STATE = ["REQUESTED", "CONFIRMED"];
 
-const SAMPLE_ACCOMMODATIONS = [
-    {
-        id: 1,
-        name: "북플로우 호텔 강남",
-        location: "서울 강남구",
-        price: "₩90,000 / 1박",
-        desc: "강남의 중심에 위치한 고급 호텔",
-        image: "/frontend/images/sample-hotel.jpg"
-    },
-    {
-        id: 2,
-        name: "북플로우 호텔 홍대",
-        location: "서울 마포구",
-        price: "₩120,000 / 1박",
-        desc: "트렌디한 홍대 인근의 모던한 숙소",
-        image: "/frontend/images/sample-room.jpg"
-    }
-];
+let myAccommodations = [];
+let editingAccommodationId = null;
 
 function escapeHtml(value) {
     return String(value ?? "")
@@ -104,9 +111,7 @@ function bindPasswordToggles() {
 
             const showPassword = target.type === "password";
             target.type = showPassword ? "text" : "password";
-            btn.innerHTML = showPassword
-                ? "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" width=\"24px\" viewBox=\"0 -960 960 960\"><path d=\"M607.5-372.5Q660-425 660-500t-52.5-127.5Q555-680 480-680t-127.5 52.5Q300-575 300-500t52.5 127.5Q405-320 480-320t127.5-52.5Zm-204-51Q372-455 372-500t31.5-76.5Q435-608 480-608t76.5 31.5Q588-545 588-500t-31.5 76.5Q525-392 480-392t-76.5-31.5ZM214-281.5Q94-363 40-500q54-137 174-218.5T480-800q146 0 266 81.5T920-500q-54 137-174 218.5T480-200q-146 0-266-81.5ZM480-500Zm207.5 160.5Q782-399 832-500q-50-101-144.5-160.5T480-720q-113 0-207.5 59.5T128-500q50 101 144.5 160.5T480-280q113 0 207.5-59.5Z\"/></svg>"
-                : "<svg xmlns=\"http://www.w3.org/2000/svg\" height=\"24px\" width=\"24px\" viewBox=\"0 -960 960 960\"><path d=\"m644-428-58-58q9-47-27-88t-93-32l-58-58q17-8 34.5-12t37.5-4q75 0 127.5 52.5T660-500q0 20-4 37.5T644-428Zm128 126-58-56q38-29 67.5-63.5T832-500q-50-101-143.5-160.5T480-720q-29 0-57 4t-55 12l-62-62q41-17 84-25.5t90-8.5q151 0 269 83.5T920-500q-23 59-60.5 109.5T772-302Zm20 246L624-222q-35 11-70.5 16.5T480-200q-151 0-269-83.5T40-500q21-53 53-98.5t73-81.5L56-792l56-56 736 736-56 56ZM222-624q-29 26-53 57t-41 67q50 101 143.5 160.5T480-280q20 0 39-2.5t39-5.5l-36-38q-11 3-21 4.5t-21 1.5q-75 0-127.5-52.5T300-500q0-11 1.5-21t4.5-21l-84-82Zm319 93Zm-151 75Z\"/></svg>";
+            btn.textContent = showPassword ? "숨김" : "보기";
         });
     });
 }
@@ -115,27 +120,146 @@ function renderMyAccommodations() {
     const listEl = document.getElementById("my-accommodation-list");
     if (!listEl) return;
 
-    if (SAMPLE_ACCOMMODATIONS.length === 0) {
+    if (myAccommodations.length === 0) {
         renderEmpty(listEl, "등록된 숙소가 없습니다.");
         return;
     }
 
-    listEl.innerHTML = SAMPLE_ACCOMMODATIONS.map((item) => `
+    listEl.innerHTML = myAccommodations.map((item) => `
         <article class="reservation-card host-card">
-            <img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.name)}">
+            <img src="${escapeHtml(item.imageUrls?.[0] || "/frontend/images/sample-hotel.jpg")}" alt="${escapeHtml(item.name)}">
             <div class="card-body">
                 <h4>${escapeHtml(item.name)}</h4>
-                <p><svg xmlns="http://www.w3.org/2000/svg" height="18px" viewBox="0 -960 960 960" width="18px" fill="#5a677d"><path d="M536.5-503.5Q560-527 560-560t-23.5-56.5Q513-640 480-640t-56.5 23.5Q400-593 400-560t23.5 56.5Q447-480 480-480t56.5-23.5ZM480-186q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"/></svg>
-                    ${escapeHtml(item.location)}</p>
-                <p class="price">${escapeHtml(item.price)}</p>
-                <p>${escapeHtml(item.desc)}</p>
+                <p>지역: ${escapeHtml(item.address || "미등록")}</p>
+                <p>연락처: ${escapeHtml(item.phone || "미등록")}</p>
+                <p class="price">카테고리: ${escapeHtml(item.category || "미등록")}</p>
+                <p>${escapeHtml(item.description || "한 줄 설명 없음")}</p>
             </div>
             <div class="card-actions vertical">
-                <button type="button" class="light-btn">수정</button>
-                <button type="button" class="danger-btn">삭제</button>
+                <button type="button" class="light-btn btn-accommodation-edit" data-id="${item.id}">수정</button>
+                <button type="button" class="danger-btn btn-accommodation-delete" data-id="${item.id}">삭제</button>
             </div>
         </article>
     `).join("");
+}
+
+async function loadMyAccommodations() {
+    try {
+        myAccommodations = await apiGet("/host/accommodations");
+        renderMyAccommodations();
+    } catch {
+        myAccommodations = [];
+        renderMyAccommodations();
+    }
+}
+
+function setRoomInputsEnabled(enabled) {
+    [roomNameInput, roomDescriptionInput, roomCapacityInput, roomPriceInput, roomImageFileInput].forEach((input) => {
+        if (!input) return;
+        input.disabled = !enabled;
+        input.required = enabled;
+    });
+}
+
+function openAccommodationModal(defaultValue = null) {
+    if (!accommodationModal) return;
+
+    editingAccommodationId = defaultValue?.id ?? null;
+    const isEditMode = Boolean(editingAccommodationId);
+
+    accommodationModalTitle.textContent = isEditMode ? "숙소 수정" : "숙소/방 등록";
+    roomFormHelp.textContent = isEditMode
+        ? "수정 모드에서는 숙소 정보만 변경됩니다. 객실은 별도 객실 관리에서 추가/수정해 주세요."
+        : "숙소 등록 시 대표 객실 1개를 함께 등록합니다.";
+
+    accommodationNameInput.value = defaultValue?.name ?? "";
+    accommodationAddressInput.value = defaultValue?.address ?? "";
+    accommodationCategoryInput.value = defaultValue?.category?.toLowerCase?.() ?? "";
+    accommodationPhoneInput.value = defaultValue?.phone ?? "";
+    accommodationDescriptionInput.value = defaultValue?.description ?? "";
+    accommodationImageFileInput.value = "";
+
+    roomNameInput.value = "";
+    roomDescriptionInput.value = "";
+    roomCapacityInput.value = "";
+    roomPriceInput.value = "";
+    roomImageFileInput.value = "";
+
+    setRoomInputsEnabled(!isEditMode);
+
+    accommodationModal.classList.remove("hidden");
+    accommodationModal.setAttribute("aria-hidden", "false");
+}
+
+function closeAccommodationModal() {
+    if (!accommodationModal) return;
+
+    editingAccommodationId = null;
+    accommodationForm?.reset();
+    setRoomInputsEnabled(true);
+    roomFormHelp.textContent = "숙소 등록 시 대표 객실 1개를 함께 등록합니다.";
+    accommodationModal.classList.add("hidden");
+    accommodationModal.setAttribute("aria-hidden", "true");
+}
+
+function getAccommodationPayload() {
+    return {
+        name: accommodationNameInput.value.trim(),
+        address: accommodationAddressInput.value.trim(),
+        category: accommodationCategoryInput.value.trim().toLowerCase(),
+        phone: accommodationPhoneInput.value.trim(),
+        description: accommodationDescriptionInput.value.trim(),
+        imageUrls: []
+    };
+}
+
+function getRoomPayload() {
+    return {
+        name: roomNameInput.value.trim(),
+        description: roomDescriptionInput.value.trim(),
+        capacity: Number(roomCapacityInput.value),
+        price: Number(roomPriceInput.value),
+        imageUrl: ""
+    };
+}
+
+function validateAccommodationPayload(payload) {
+    if (!payload.name || !payload.address || !payload.phone || !payload.category || !payload.description) {
+        alert("숙소 정보(숙소명/지역/전화번호/카테고리/한 줄 설명)를 모두 입력해주세요.");
+        return false;
+    }
+    return true;
+}
+
+function validateRoomPayload(payload) {
+    if (!payload.name || !payload.description || !payload.capacity || !payload.price) {
+        alert("방 정보(방 이름/설명/수용인원/1박 비용)를 모두 입력해주세요.");
+        return false;
+    }
+    if (payload.capacity < 1) {
+        alert("수용인원은 1명 이상이어야 합니다.");
+        return false;
+    }
+    if (payload.price < 1000) {
+        alert("1박 비용은 1,000원 이상으로 입력해주세요.");
+        return false;
+    }
+    return true;
+}
+
+async function uploadImageFile(file) {
+    const formData = new FormData();
+    formData.append("file", file);
+    const uploaded = await apiUpload("/files/images", formData);
+    return uploaded.url;
+}
+
+function normalizeCategory(category) {
+    const allowed = ["hotel", "motel", "pension", "resort", "etc"];
+    if (!allowed.includes(category)) {
+        throw new Error("카테고리는 hotel/motel/pension/resort/etc 중 하나여야 합니다.");
+    }
+    return category;
 }
 
 function formatPrice(value) {
@@ -214,7 +338,7 @@ async function checkLoginStatus() {
         userName.textContent = me.name;
         profileNameInput.value = me.name || "";
 
-        renderMyAccommodations();
+        await loadMyAccommodations();
         await loadMyReservations();
     } catch {
         setAuthView(false);
@@ -314,14 +438,74 @@ function bindAuthEvents() {
         alert("회원탈퇴 기능은 백엔드 연동 후 활성화됩니다.");
     });
 
-    profileForm?.addEventListener("submit", (e) => {
+    profileForm?.addEventListener("submit", async (e) => {
         e.preventDefault();
-        alert("프로필 수정 기능은 백엔드 연동 후 활성화됩니다.");
+
+        const changedName = profileNameInput.value.trim();
+        const currentPassword = currentPasswordInput.value.trim();
+        const newPassword = newPasswordInput.value.trim();
+        const newPasswordConfirm = newPasswordConfirmInput.value.trim();
+
+        try {
+            if (changedName && changedName !== userName.textContent) {
+                const updated = await apiPatch("/users/me/profile", { name: changedName });
+                userName.textContent = updated.name;
+                profileNameInput.value = updated.name;
+            }
+
+            const wantsPasswordUpdate = currentPassword || newPassword || newPasswordConfirm;
+            if (wantsPasswordUpdate) {
+                if (!currentPassword || !newPassword || !newPasswordConfirm) {
+                    alert("비밀번호 변경 항목을 모두 입력해주세요.");
+                    return;
+                }
+                if (newPassword !== newPasswordConfirm) {
+                    alert("새 비밀번호와 확인 비밀번호가 일치하지 않습니다.");
+                    return;
+                }
+
+                await apiPatch("/users/me/password", {
+                    currentPassword,
+                    newPassword
+                });
+            }
+
+            currentPasswordInput.value = "";
+            newPasswordInput.value = "";
+            newPasswordConfirmInput.value = "";
+            alert("계정 정보가 저장되었습니다.");
+        } catch (error) {
+            alert(error.message || "계정 정보 저장에 실패했습니다.");
+        }
     });
 }
 
 function bindReservationCardEvents() {
     document.querySelector(".account-main")?.addEventListener("click", async (e) => {
+        const accommodationEditBtn = e.target.closest(".btn-accommodation-edit");
+        if (accommodationEditBtn) {
+            const accommodationId = Number(accommodationEditBtn.dataset.id);
+            const target = myAccommodations.find((item) => item.id === accommodationId);
+            if (!target) return;
+            openAccommodationModal(target);
+            return;
+        }
+
+        const accommodationDeleteBtn = e.target.closest(".btn-accommodation-delete");
+        if (accommodationDeleteBtn) {
+            const accommodationId = Number(accommodationDeleteBtn.dataset.id);
+            if (!confirm("정말 숙소를 삭제하시겠습니까?")) return;
+
+            try {
+                await apiDelete(`/host/accommodations/${accommodationId}`);
+                await loadMyAccommodations();
+                alert("숙소가 삭제되었습니다.");
+            } catch (error) {
+                alert(error.message || "숙소 삭제에 실패했습니다.");
+            }
+            return;
+        }
+
         const cancelBtn = e.target.closest(".btn-cancel");
         if (cancelBtn) {
             const reservationId = cancelBtn.dataset.id;
@@ -344,9 +528,78 @@ function bindReservationCardEvents() {
     });
 }
 
+function bindAccommodationEvents() {
+    addAccommodationBtn?.addEventListener("click", () => {
+        openAccommodationModal();
+    });
+
+    accommodationForm?.addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const accommodationPayload = getAccommodationPayload();
+        if (!validateAccommodationPayload(accommodationPayload)) return;
+
+        const isEditMode = Boolean(editingAccommodationId);
+
+        try {
+            accommodationPayload.category = normalizeCategory(accommodationPayload.category);
+
+            if (isEditMode) {
+                const imageFile = accommodationImageFileInput.files?.[0];
+                const currentImage = myAccommodations.find((item) => item.id === editingAccommodationId)?.imageUrls?.[0];
+                if (imageFile) {
+                    accommodationPayload.imageUrls = [await uploadImageFile(imageFile)];
+                } else if (currentImage) {
+                    accommodationPayload.imageUrls = [currentImage];
+                } else {
+                    alert("숙소 이미지는 최소 1장 필요합니다.");
+                    return;
+                }
+
+                await apiPatch(`/host/accommodations/${editingAccommodationId}`, accommodationPayload);
+                alert("숙소 정보가 수정되었습니다.");
+            } else {
+                const roomPayload = getRoomPayload();
+                if (!validateRoomPayload(roomPayload)) return;
+
+                const accommodationImageFile = accommodationImageFileInput.files?.[0];
+                const roomImageFile = roomImageFileInput.files?.[0];
+                if (!accommodationImageFile || !roomImageFile) {
+                    alert("숙소 이미지와 방 이미지는 각각 최소 1장 필요합니다.");
+                    return;
+                }
+
+                accommodationPayload.imageUrls = [await uploadImageFile(accommodationImageFile)];
+                roomPayload.imageUrl = await uploadImageFile(roomImageFile);
+
+                const createdAccommodation = await apiPost("/host/accommodations", accommodationPayload);
+                await apiPost("/rooms", {
+                    ...roomPayload,
+                    accommodationId: createdAccommodation.id
+                });
+                alert("숙소와 대표 객실이 등록되었습니다.");
+            }
+
+            await loadMyAccommodations();
+            closeAccommodationModal();
+        } catch (error) {
+            alert(error.message || "숙소 저장에 실패했습니다.");
+        }
+    });
+
+    accommodationModal?.addEventListener("click", (e) => {
+        if (e.target.dataset.role === "close-accommodation-modal") {
+            closeAccommodationModal();
+        }
+    });
+
+    accommodationCancelBtn?.addEventListener("click", closeAccommodationModal);
+}
+
 bindPanelNavigation();
 bindPasswordToggles();
 bindReviewModalEvents();
 bindAuthEvents();
 bindReservationCardEvents();
+bindAccommodationEvents();
 checkLoginStatus();

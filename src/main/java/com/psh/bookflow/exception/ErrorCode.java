@@ -9,11 +9,13 @@ public enum ErrorCode {
     USER_NOT_FOUND(HttpStatus.NOT_FOUND, "사용자를 찾을 수 없습니다."),
     USER_EMAIL_DUPLICATED(HttpStatus.CONFLICT, "이미 사용 중인 이메일입니다."),
     USER_PASSWORD_MISMATCH(HttpStatus.UNAUTHORIZED, "비밀번호가 일치하지 않습니다."),
+    USER_PASSWORD_SAME_AS_OLD(HttpStatus.BAD_REQUEST, "새 비밀번호는 현재 비밀번호와 달라야 합니다."),
     UNAUTHORIZED(HttpStatus.UNAUTHORIZED, "로그인이 필요합니다."),
 
     // ===== Room =====
     ROOM_NOT_FOUND(HttpStatus.NOT_FOUND, "존재하지 않는 객실입니다."),
     ROOM_NOT_AVAILABLE(HttpStatus.CONFLICT, "예약 가능한 객실 상태가 아닙니다."),
+    ROOM_IMAGE_REQUIRED(HttpStatus.BAD_REQUEST, "객실 이미지는 최소 1장 필요합니다."),
 
     // ===== Reservation - create =====
     RESERVATION_DATE_INVALID(HttpStatus.BAD_REQUEST, "체크인/체크아웃 날짜가 올바르지 않습니다."),
@@ -27,9 +29,13 @@ public enum ErrorCode {
 
     // ===== Accommodation =====
     ACCOMMODATION_NOT_FOUND(HttpStatus.NOT_FOUND, "숙소를 찾을 수 없습니다."),
+    ACCOMMODATION_IMAGE_REQUIRED(HttpStatus.BAD_REQUEST, "숙소 이미지는 최소 1장 필요합니다."),
+    ACCOMMODATION_CATEGORY_INVALID(HttpStatus.BAD_REQUEST, "숙소 카테고리는 hotel/motel/pension/resort/etc 중 하나여야 합니다."),
 
     // ===== Common =====
     FORBIDDEN(HttpStatus.FORBIDDEN, "해당 요청에 대한 권한이 없습니다."),
+    METHOD_NOT_ALLOWED(HttpStatus.METHOD_NOT_ALLOWED, "지원하지 않는 HTTP 메서드입니다."),
+    BAD_REQUEST(HttpStatus.BAD_REQUEST, "요청 값이 올바르지 않습니다."),
     INTERNAL_ERROR(HttpStatus.INTERNAL_SERVER_ERROR, "서버 오류가 발생했습니다.");
 
     private final HttpStatus status;

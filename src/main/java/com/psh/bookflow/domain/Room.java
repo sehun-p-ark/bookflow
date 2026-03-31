@@ -28,6 +28,10 @@ public class Room {
     @Column(nullable = false)
     private Integer capacity;
 
+    @Column(nullable = false)
+    private String imageUrl;
+
+
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
     private RoomStatus status = RoomStatus.AVAILABLE;
@@ -53,16 +57,16 @@ public class Room {
     @JoinColumn(name = "accommodation_id", nullable = false)
     private Accommodation accommodation;
 
-    public Room(String name, String description, Integer price, Integer capacity, Accommodation accommodation) {
+    public Room(String name, String description, Integer price, Integer capacity, String imageUrl, Accommodation accommodation) {
         this.name = name;
         this.description = description;
         this.price = price;
         this.capacity = capacity;
+        this.imageUrl = imageUrl;
         this.accommodation = accommodation;
     }
 
-
-    // ✅ 상태 변경은 명시적 메서드로만
+    // 상태 변경은 명시적 메서드로만
     public void changeStatus(RoomStatus status) {
         this.status = status;
     }

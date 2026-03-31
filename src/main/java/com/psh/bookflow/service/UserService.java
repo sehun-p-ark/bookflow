@@ -67,4 +67,27 @@ public class UserService {
                         new UserException(ErrorCode.USER_NOT_FOUND)
                 );
     }
+
+
+    @Transactional
+    public User updateName(Long userId, String name) {
+        User user = getById(userId);
+        user.updateName(name);
+        return user;
+    }
+
+    @Transactional
+    public void updatePassword(Long userId, String currentRawPassword, String newRawPassword) {
+        User user = getById(userId);
+
+        if (!passwordEncoder.matches(currentRawPassword, user.getPassword())) {
+            throw new UserException(ErrorCode.USER_PASSWORD_MISMATCH);
+        }
+
+        if (passwordEncoder.matches(newRawPassword, user.getPassword())) {
+            throw new UserException(ErrorCode.USER_PASSWORD_SAME_AS_OLD);
+        }
+
+        user.updatePassword(passwordEncoder.encode(newRawPassword));
+    }
 }

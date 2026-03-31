@@ -1,8 +1,6 @@
 package com.psh.bookflow.controller;
 import com.psh.bookflow.domain.User;
-import com.psh.bookflow.dto.user.LoginRequest;
-import com.psh.bookflow.dto.user.SignupRequest;
-import com.psh.bookflow.dto.user.UserResponse;
+import com.psh.bookflow.dto.user.*;
 import com.psh.bookflow.exception.ErrorCode;
 import com.psh.bookflow.exception.UserException;
 import com.psh.bookflow.service.UserService;
@@ -59,5 +57,54 @@ public class UserController {
         }
         User user = userService.getById(userId);
         return ResponseEntity.ok(new UserResponse(user));
+    }
+
+
+    @PatchMapping("/me/profile")
+    public ResponseEntity<UserResponse> updateProfile(
+            @Valid @RequestBody UpdateProfileRequest request,
+            HttpSession session
+    ) {
+        Long userId = getLoginUserId(session);
+        User updated = userService.updateName(userId, request.getName());
+        return ResponseEntity.ok(new UserResponse(updated));
+    }
+
+    @PostMapping("/me/profile")
+    public ResponseEntity<UserResponse> updateProfilePost(
+            @Valid @RequestBody UpdateProfileRequest request,
+            HttpSession session
+    ) {
+        return updateProfile(request, session);
+    }
+
+    @PatchMapping("/me/password")
+    public ResponseEntity<Void> updatePassword(
+            @Valid @RequestBody UpdatePasswordRequest request,
+            HttpSession session
+    ) {
+        Long userId = getLoginUserId(session);
+        userService.updatePassword(
+                userId,
+                request.getCurrentPassword(),
+                request.getNewPassword()
+        );
+        return ResponseEntity.noContent().build();
+    }
+
+    @PostMapping("/me/password")
+    public ResponseEntity<Void> updatePasswordPost(
+            @Valid @RequestBody UpdatePasswordRequest request,
+            HttpSession session
+    ) {
+        return updatePassword(request, session);
+    }
+
+    private static Long getLoginUserId(HttpSession session) {
+        Long userId = (Long) session.getAttribute("LOGIN_USER_ID");
+        if (userId == null) {
+            throw new UserException(ErrorCode.UNAUTHORIZED);
+        }
+        return userId;
     }
 }

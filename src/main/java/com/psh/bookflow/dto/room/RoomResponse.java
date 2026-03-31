@@ -12,6 +12,7 @@ public class RoomResponse {
     private final String description;
     private final Integer price;
     private final Integer capacity;
+    private final String imageUrl;
     private final RoomStatus status;
     private final Long accommodationId;
 
@@ -21,6 +22,7 @@ public class RoomResponse {
         this.description = room.getDescription();
         this.price = room.getPrice();
         this.capacity = room.getCapacity();
+        this.imageUrl = room.getImageUrl();
         this.status = room.getStatus();
         this.accommodationId = room.getAccommodation().getId();
     }

@@ -71,4 +71,12 @@ public class User { // user 테이블
         this.birth = birth;
         this.phone = phone;
     }
+
+    public void updateName(String name) {
+        this.name = name;
+    }
+
+    public void updatePassword(String encodedPassword) {
+        this.password = encodedPassword;
+    }
 }

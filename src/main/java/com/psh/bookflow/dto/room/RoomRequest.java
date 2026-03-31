@@ -8,5 +8,6 @@ public class RoomRequest {
     private String description;
     private int price;
     private int capacity;
+    private String imageUrl;
     private Long accommodationId;
 }

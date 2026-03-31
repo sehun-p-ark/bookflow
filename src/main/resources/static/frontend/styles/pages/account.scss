@@ -415,11 +415,50 @@ a.detail-btn {
     }
 }
 
+.accommodation-modal-panel {
+    width: min(92vw, 40rem);
+    max-height: 80vh;
+    margin-top: 8vh;
+    overflow-y: auto;
+
+    #accommodation-form {
+
+        > label {
+            font-size: 1.175rem;
+        }
+
+        > .review-modal__actions > #accommodation-cancel-btn {
+            height: 3.5rem;
+            margin-top: 1.4rem;
+        }
+    }
+
+    .form-section-title {
+        font-size: 1.25rem;
+        font-weight: 700;
+        margin: 0.2rem 0 0.25rem;
+        color: #263047;
+    }
+
+    .form-divider {
+        border: 0;
+        border-top: 1px solid #e2e6ee;
+        margin: 0.8rem 0 0.2rem;
+    }
+
+    .form-help {
+        margin: 0 0 0.4rem;
+        color: #667388;
+        font-size: 0.87rem;
+    }
+}
+
 .review-form {
     display: flex;
     flex-direction: column;
     gap: 0.7rem;
 
+    input,
     select,
     textarea {
         border: 1px solid #d2d8e3;
@@ -430,5 +469,22 @@ a.detail-btn {
 
     textarea {
         resize: vertical;
+    }
+
+    input[type="file"] {
+        padding: 0.5rem 0.65rem;
+        min-height: 3.2rem;
+        background: #fff;
+    }
+
+    input[type="file"]::file-selector-button {
+        margin: 0.7rem 0.7rem 0 0;
+        border: 1px solid #c0c7d6;
+        border-radius: 0.5rem;
+        background: #f5f7fb;
+        color: #2f3b50;
+        font-size: 0.95rem;
+        padding: 0.45rem 0.75rem;
+        cursor: pointer;
     }
 }
